@@ -1,0 +1,176 @@
+/* Global CSS untuk konsistensi layout admin */
+
+/* Memastikan content tidak terpotong navigation */
+.main-content-wrapper {
+    padding-top: 6rem; /* 96px - sesuai dengan pt-24 */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-content-wrapper {
+        padding-top: 7rem; /* 112px untuk mobile */
+    }
+}
+
+/* Konsistensi spacing */
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.content-section {
+    margin-bottom: 1.5rem;
+}
+
+/* Card styling konsisten */
+.modern-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: none;
+    overflow: hidden;
+}
+
+.modern-card-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1.5rem;
+}
+
+/* Button styling konsisten */
+.btn-modern {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.btn-modern:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Table styling konsisten */
+.modern-table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.modern-table thead th {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 1rem;
+}
+
+.modern-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Form styling konsisten */
+.form-control-modern:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Badge styling konsisten */
+.badge-modern {
+    border-radius: 9999px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+}
+
+/* Force dark mode for common white backgrounds and light borders */
+.dark .bg-white { background-color: #111827 !important; }
+.dark .border-gray-200 { border-color: #374151 !important; }
+.dark .text-gray-900 { color: #f9fafb !important; }
+
+/* Bootstrap components in dark mode */
+.dark .card { background-color: #1f2937 !important; border-color: #374151 !important; color: #e5e7eb !important; }
+.dark .table { color: #e5e7eb !important; }
+.dark .list-group-item { background-color: #111827 !important; color: #e5e7eb !important; border-color: #374151 !important; }
+.dark .dropdown-menu { background-color: #111827 !important; color: #e5e7eb !important; border-color: #374151 !important; }
+.dark .dropdown-item { color: #e5e7eb !important; }
+.dark .dropdown-item:hover, .dark .dropdown-item:focus { background-color: #1f2937 !important; color: #f9fafb !important; }
+
+/* Custom components in dark mode (with stronger priority) */
+.dark .modern-card { background: #1f2937 !important; border: 1px solid #374151 !important; }
+.dark .modern-card-header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%) !important; border-bottom: 1px solid #374151 !important; }
+.dark .modern-table tbody tr:hover { background-color: #111827 !important; }
+.dark .form-control-modern:focus { border-color: #60a5fa !important; box-shadow: 0 0 0 0.2rem rgba(96, 165, 250, 0.25) !important; }
+
+/* Gradient backgrounds */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+}
+
+/* Hover effects */
+.hover-lift:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-shadow-lg:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Global card/table hover animations to align Bootstrap with Tailwind feel */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.table-hover tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.dark .table-hover tbody tr:hover {
+    background-color: #111827 !important;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .mobile-padding {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .mobile-text-xs {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .mobile-padding {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
