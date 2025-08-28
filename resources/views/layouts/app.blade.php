@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>LMS SMA MUSLIMIN</title>
         
         <!-- Keep Bootstrap temporarily to avoid breaking existing Bootstrap-based pages during transition -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
         @stack('styles')
     </head>
-    <body class="min-h-screen bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
+    <body class="min-h-screen bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100 @yield('page_class')">
         <!-- Global Top Navbar -->
         @include('layouts.navigation')
 

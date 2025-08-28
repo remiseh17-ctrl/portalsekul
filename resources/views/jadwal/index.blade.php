@@ -279,62 +279,7 @@
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('liveSearchInput');
-    const kelasFilter = document.getElementById('kelasFilter');
-    const guruFilter = document.getElementById('guruFilter');
-    const hariFilter = document.getElementById('hariFilter');
-    const clearSearchBtn = document.getElementById('clearSearch');
-    const tableBody = document.querySelector('tbody');
-    const rows = tableBody.querySelectorAll('tr');
-
-    // Function to perform search and filter
-    function filterTable() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const selectedKelas = kelasFilter.value.toLowerCase();
-        const selectedGuru = guruFilter ? guruFilter.value.toLowerCase() : '';
-        const selectedHari = hariFilter.value.toLowerCase();
-
-        rows.forEach(row => {
-            if (row.querySelector('td[colspan]')) return; // Skip empty state row
-            
-            const kelas = row.cells[1]?.textContent.toLowerCase() || '';
-            const mapel = row.cells[2]?.textContent.toLowerCase() || '';
-            const guru = row.cells[3]?.textContent.toLowerCase() || '';
-            const hari = row.cells[4]?.textContent.toLowerCase() || '';
-            
-            const matchesSearch = kelas.includes(searchTerm) || mapel.includes(searchTerm) || guru.includes(searchTerm);
-            const matchesKelas = !selectedKelas || kelas.includes(selectedKelas);
-            const matchesGuru = !selectedGuru || guru.includes(selectedGuru);
-            const matchesHari = !selectedHari || hari.includes(selectedHari);
-            
-            row.style.display = matchesSearch && matchesKelas && matchesGuru && matchesHari ? '' : 'none';
-        });
-
-        // Show/hide clear button
-        clearSearchBtn.classList.toggle('hidden', !searchTerm);
-    }
-
-    // Event listeners
-    searchInput.addEventListener('input', filterTable);
-    kelasFilter.addEventListener('change', filterTable);
-    if (guruFilter) guruFilter.addEventListener('change', filterTable);
-    hariFilter.addEventListener('change', filterTable);
-    
-    clearSearchBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        filterTable();
-        searchInput.focus();
-    });
-
-    // Initialize Lucide icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-});
-</script>
-
+<script src="{{ asset('js/page.js') }}"></script>
 {{-- Include Modal Create Jadwal --}}
 @include('jadwal.create-modal')
 

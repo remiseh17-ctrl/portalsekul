@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('page_class', 'page-guru')
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
     <!-- Main Content Container -->
@@ -92,7 +92,7 @@
             <!-- End Header -->
 
             <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+                <table id="tableGuru" class="w-full text-sm">
                     <thead class="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                         <tr>
                             <th class="px-4 py-3 text-center font-semibold text-gray-900 dark:text-white w-16">
@@ -251,8 +251,10 @@
     </div>
 </div>
 
-    <script src="{{ asset('js/page.js') }}"></script>
+    
 
 {{-- Include Modal Create Guru --}}
 @include('guru.create-modal')
+
+<script src="{{ asset('js/page.js') }}"></script>
 @endsection

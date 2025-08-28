@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('page_class', 'page-dashboard')
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
     <!-- Main Content Container -->
@@ -300,104 +301,5 @@
     </div>
 </div>
 
-
-{{-- Enhanced Search Filter Script --}}
-<script>
-    function createAdvancedTableFilter(inputId, tableId) {
-        const input = document.getElementById(inputId);
-        const table = document.getElementById(tableId);
-        
-        if (!input || !table) return;
-        
-        input.addEventListener("keyup", function() {
-            const filter = this.value.toLowerCase().trim();
-            const rows = table.querySelectorAll('tbody tr, > div');
-            
-            rows.forEach(row => {
-                if (row.textContent.toLowerCase().includes(filter)) {
-                    row.style.display = '';
-                    row.classList.remove('hidden');
-                } else {
-                    row.style.display = 'none';
-                    row.classList.add('hidden');
-                }
-            });
-            
-            // Show/hide empty state
-            const visibleRows = Array.from(rows).filter(row => !row.classList.contains('hidden'));
-            const emptyState = table.querySelector('[colspan]') || table.querySelector('.text-center p');
-            
-            if (emptyState && emptyState.closest('tr, div')) {
-                emptyState.closest('tr, div').style.display = visibleRows.length === 0 ? '' : 'none';
-            }
-        });
-        
-        // Add clear button functionality
-        input.addEventListener('input', function() {
-            if (this.value === '') {
-                const rows = table.querySelectorAll('tbody tr, > div');
-                rows.forEach(row => {
-                    row.style.display = '';
-                    row.classList.remove('hidden');
-                });
-            }
-        });
-    }
-
-    // Initialize filters when DOM is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        createAdvancedTableFilter("searchJadwal", "tableJadwal");
-        createAdvancedTableFilter("searchPengumuman", "tablePengumuman");
-        
-        // Initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-        
-        // Add loading animation to cards
-        const cards = document.querySelectorAll('.stat-card');
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                card.style.transition = 'all 0.6s ease-out';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 100);
-        });
-
-        // Animate table rows on first paint and when they enter viewport
-        const jadwalRows = document.querySelectorAll('#tableJadwal tbody tr');
-        const pengumumanItems = document.querySelectorAll('#tablePengumuman > div');
-
-        function prepareAnimate(el, delayMs) {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(10px)';
-            el.style.willChange = 'opacity, transform';
-            setTimeout(() => {
-                el.style.transition = 'opacity 600ms ease-out, transform 600ms ease-out';
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            }, delayMs);
-        }
-
-        jadwalRows.forEach((row, i) => prepareAnimate(row, i * 60));
-        pengumumanItems.forEach((item, i) => prepareAnimate(item, i * 70));
-
-        // Intersection-based re-animation for dynamic content (if filters change)
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.transition = 'opacity 500ms ease-out, transform 500ms ease-out';
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        jadwalRows.forEach(r => io.observe(r));
-        pengumumanItems.forEach(p => io.observe(p));
-    });
-</script>
+<script src="{{ asset('js/page.js') }}"></script>
 @endsection

@@ -3,12 +3,10 @@
       <div class="row align-items-center py-3 px-2">
         <div class="col-auto flex items-center">
           <!-- Brand -->
-          <a href="{{ url('/') }}" class="text-base font-semibold text-gray-900 dark:text-gray-100">{{ config('app.name', 'Portal Sekolah') }}</a>
+          <a href="{{ url('/') }}" class="text-base font-semibold text-gray-900 dark:text-gray-100">LMS SMA MUSLIMIN</a>
         </div>
         <div class="col flex flex-row justify-end items-center gap-2">
-        <!-- Brand -->
-        <a href="{{ url('/') }}" class="text-base font-semibold text-gray-900 dark:text-gray-100">{{ config('app.name', 'Portal Sekolah') }}</a>
-            <!-- Theme toggle -->
+        <!-- Theme toggle -->
             <button id="theme-toggle" type="button" class="inline-flex items-center justify-center h-10 w-10 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700" aria-label="Toggle theme">
                 <i id="theme-icon" data-lucide="moon" class="h-5 w-5"></i>
             </button>

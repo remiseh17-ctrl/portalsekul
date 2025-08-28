@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('page_class', 'page-siswa')
 @section('content')
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
     <!-- Main Content Container -->
@@ -81,7 +82,7 @@
                             </button>
                         </div>
                     </div>
-                          <select id="kelasFilter" class="w-[110px] md:w-[130px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 shadow-sm"
+                    <select id="kelasFilter" class="w-[110px] md:w-[130px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 shadow-sm">
                         <option value="">Semua Kelas</option>
                         @foreach($kelasList as $kelas)
                             <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
@@ -92,7 +93,7 @@
             <!-- End Header -->
 
             <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+                <table id="tableSiswa" class="w-full text-sm">
                     <thead class="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                         <tr>
                             <th class="px-4 py-3 text-center font-semibold text-gray-900 dark:text-white w-16">
@@ -243,11 +244,9 @@
         </div>
     </div>
 </div>
-    <script src="{{ asset('js/page.js') }}"></script>
 
 {{-- Include Modal Create Siswa --}}
 @include('siswa.create-modal')
 
-{{-- Enhanced Scripts --}}
-
+<script src="{{ asset('js/page.js') }}"></script>
 @endsection
