@@ -1,6 +1,6 @@
 <!-- Modal Create Siswa -->
 <div class="modal fade" id="modalCreateSiswa" tabindex="-1" aria-labelledby="modalCreateSiswaLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-lg border-0 overflow-y-auto max-h-[90vh]">
       <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -54,13 +54,9 @@
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">No HP</label>
               <input type="text" name="no_hp" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition">
             </div>
-            <div>
+            <div class="md:col-span-2">
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Alamat</label>
               <textarea name="alamat" class="form-textarea mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" rows="2"></textarea>
-            </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Foto</label>
-              <input type="file" name="foto" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" accept="image/*">
             </div>
           </div>
         </div>

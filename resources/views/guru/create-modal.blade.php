@@ -1,6 +1,6 @@
 <!-- Modal Create Guru -->
 <div class="modal fade" id="modalCreateGuru" tabindex="-1" aria-labelledby="modalCreateGuruLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered"> {{-- Tambahkan modal-dialog-centered --}}
     <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-lg border-0 overflow-y-auto max-h-[90vh]">
       <form action="{{ route('guru.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -49,10 +49,7 @@
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Alamat</label>
               <textarea name="alamat" class="form-textarea mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" rows="2"></textarea>
             </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Foto</label>
-              <input type="file" name="foto" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" accept="image/*">
-            </div>
+            
           </div>
         </div>
         <div class="modal-footer flex justify-between bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">

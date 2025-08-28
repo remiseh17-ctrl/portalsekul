@@ -1,6 +1,6 @@
 <!-- Modal Create Pengumuman -->
 <div class="modal fade" id="modalCreatePengumuman" tabindex="-1" aria-labelledby="modalCreatePengumumanLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-md modal-dialog-centered">
     <div class="modal-content">
       <form action="{{ route('pengumuman.store') }}" method="POST">
         @csrf

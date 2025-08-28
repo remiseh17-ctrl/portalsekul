@@ -1,6 +1,6 @@
 <!-- Modal Create Jadwal -->
 <div class="modal fade" id="modalCreateJadwal" tabindex="-1" aria-labelledby="modalCreateJadwalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-lg border-0 overflow-y-auto max-h-[90vh]">
       <form action="{{ route('jadwal.store') }}" method="POST">
         @csrf

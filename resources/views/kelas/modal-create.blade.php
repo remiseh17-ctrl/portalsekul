@@ -1,6 +1,6 @@
 <!-- Modal Create Kelas -->
 <div class="modal fade" id="modalCreateKelas" tabindex="-1" aria-labelledby="modalCreateKelasLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md modal-dialog-scrollable">
+  <div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-lg border-0 overflow-y-auto max-h-[90vh]">
       <form action="{{ route('kelas.store') }}" method="POST">
         @csrf
