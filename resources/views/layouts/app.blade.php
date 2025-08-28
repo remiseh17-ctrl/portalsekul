@@ -119,6 +119,7 @@
 
         <!-- Icons CDN (Lucide) -->
         <script src="https://unpkg.com/lucide@latest"></script>
+        
         <!-- Keep Bootstrap JS for pages that still use it -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="{{ asset('js/layout.js') }}"></script>
