@@ -118,6 +118,13 @@ document.addEventListener('DOMContentLoaded', function () {
         animateOnLoad('tbody tr', 80);
     }
 
+    // Halaman Pengumuman
+    if (body.classList.contains('page-pengumuman')) {
+        createTableFilter("liveSearchInput", "tablePengumuman", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
     // Global animations untuk semua halaman
     animateOnLoad('.stat-card', 100);
     animateOnLoad('.card', 120);
