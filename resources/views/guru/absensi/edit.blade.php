@@ -57,9 +57,9 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control @error('tanggal') is-invalid @enderror" 
-                                           id="tanggal" name="tanggal" 
-                                           value="{{ old('tanggal', $absensi->tanggal->format('Y-m-d')) }}" required>
+                                    <input type="date" class="form-control @error('tanggal') is-invalid @enderror"
+                                           id="tanggal" name="tanggal"
+                                           value="{{ old('tanggal', $absensi->tanggal ? \Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d') : '') }}" required>
                                     @error('tanggal')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

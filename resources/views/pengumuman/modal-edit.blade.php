@@ -22,7 +22,7 @@
             </div>
             <div>
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Tanggal <span class="text-red-500">*</span></label>
-              <input type="date" name="tanggal" value="{{ old('tanggal', $pengumuman->tanggal->format('Y-m-d')) }}" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-orange-500 focus:border-orange-500 transition" required>
+              <input type="date" name="tanggal" value="{{ old('tanggal', $pengumuman->tanggal ? \Carbon\Carbon::parse($pengumuman->tanggal)->format('Y-m-d') : '') }}" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-orange-500 focus:border-orange-500 transition" required>
             </div>
             <div>
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Isi <span class="text-red-500">*</span></label>
