@@ -28,7 +28,7 @@
                 <td>{{ $absensi->status }}</td>
                 <td>{{ $absensi->keterangan }}</td>
                 <td>
-                    <a href="{{ route('absensi.edit', $absensi) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditAbsensi{{ $absensi->id }}">Edit</button>
                     <form action="{{ route('absensi.destroy', $absensi) }}" method="POST" style="display:inline-block">
                         @csrf
                         @method('DELETE')
@@ -39,5 +39,12 @@
             @endforeach
         </tbody>
     </table>
-</div>
+    </div>
+
+
+
+{{-- Include Modal Edit Absensi --}}
+@foreach($absensis as $absensi)
+    @include('absensi.edit-modal', ['absensi' => $absensi])
+@endforeach
 @endsection 

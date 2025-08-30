@@ -187,11 +187,11 @@
                                        title="Lihat Jadwal" data-bs-toggle="tooltip">
                                         <i data-lucide="calendar" class="w-4 h-4"></i>
                                     </a>
-                                    <a href="{{ route('kelas.edit', $kls) }}" 
-                                       class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
-                                       title="Edit Kelas" data-bs-toggle="tooltip">
+                                    <button type="button" 
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
+                                            title="Edit Kelas" data-bs-toggle="modal" data-bs-target="#modalEditKelas{{ $kls->id }}">
                                         <i data-lucide="pencil" class="w-4 h-4"></i>
-                                    </a>
+                                    </button>
                                     <form action="{{ route('kelas.destroy', $kls) }}" method="POST"
                                           onsubmit="return confirm('Yakin ingin menghapus kelas ini?')" class="inline">
                                         @csrf @method('DELETE')
@@ -232,6 +232,11 @@
 
 {{-- Include Modal Create Kelas --}}
 @include('kelas.modal-create')
+
+{{-- Include Modal Edit Kelas --}}
+@foreach($kelas as $kls)
+    @include('kelas.modal-edit', ['kls' => $kls])
+@endforeach
 
 <script src="{{ asset('js/page.js') }}"></script>
 @endsection

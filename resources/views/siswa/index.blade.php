@@ -202,11 +202,11 @@
                             </td>
                             <td class="px-4 py-4">
                                 <div class="flex justify-center gap-2">
-                                    <a href="{{ route('siswa.edit', $siswa) }}" 
-                                       class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
-                                       title="Edit Siswa" data-bs-toggle="tooltip">
+                                    <button type="button" 
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
+                                            title="Edit Siswa" data-bs-toggle="modal" data-bs-target="#modalEditSiswa{{ $siswa->id }}">
                                         <i data-lucide="pencil" class="w-4 h-4"></i>
-                                    </a>
+                                    </button>
                                     <form action="{{ route('siswa.destroy', $siswa) }}" method="POST"
                                           onsubmit="return confirm('Yakin ingin menghapus siswa ini?')" class="inline">
                                         @csrf @method('DELETE')
@@ -247,6 +247,11 @@
 
 {{-- Include Modal Create Siswa --}}
 @include('siswa.create-modal')
+
+{{-- Include Modal Edit Siswa --}}
+@foreach($siswas as $siswa)
+    @include('siswa.edit-modal', ['siswa' => $siswa])
+@endforeach
 
 <script src="{{ asset('js/page.js') }}"></script>
 @endsection

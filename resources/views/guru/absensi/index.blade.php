@@ -61,10 +61,11 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('absensi.edit', $absensi->id) }}" 
-                                               class="btn btn-sm btn-warning" title="Edit">
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-warning" title="Edit"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEditAbsensiGuru{{ $absensi->id }}">
                                                 <i class="bi bi-pencil"></i>
-                                            </a>
+                                            </button>
                                             <form action="{{ route('absensi.destroy', $absensi->id) }}" method="POST" 
                                                   onsubmit="return confirm('Yakin ingin menghapus absensi ini?')" class="d-inline">
                                                 @csrf @method('DELETE')
@@ -98,4 +99,11 @@
         </div>
     </div>
 </div>
+
+
+
+{{-- Include Modal Edit Absensi Guru --}}
+@foreach($absensis as $absensi)
+    @include('guru.absensi.edit-modal', ['absensi' => $absensi])
+@endforeach
 @endsection 
