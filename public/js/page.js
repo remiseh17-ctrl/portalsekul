@@ -125,6 +125,98 @@ document.addEventListener('DOMContentLoaded', function () {
         animateOnLoad('tbody tr', 80);
     }
 
+    // Halaman Dashboard Siswa
+    if (body.classList.contains('page-dashboard-siswa')) {
+        createTableFilter("searchJadwalSiswa", "tableJadwalSiswa", [], null);
+        createTableFilter("searchPengumumanSiswa", "tablePengumumanSiswa", [], null);
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Siswa - Jadwal
+    if (body.classList.contains('page-siswa-jadwal')) {
+        createTableFilter("searchJadwalSiswa", "tableJadwalSiswa", [], null);
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Siswa - Absensi
+    if (body.classList.contains('page-siswa-absensi')) {
+        createTableFilter("searchAbsensiSiswa", "tableAbsensiSiswa", [], null);
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Siswa - Materi
+    if (body.classList.contains('page-siswa-materi')) {
+        createTableFilter("searchMateriSiswa", "tableMateriSiswa", [], null);
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Siswa - Pengumuman
+    if (body.classList.contains('page-siswa-pengumuman')) {
+        createTableFilter("searchPengumumanAdmin", "tablePengumumanAdmin", [], null);
+        createTableFilter("searchPengumumanKelas", "tablePengumumanKelas", [], null);
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Siswa - Nilai
+    if (body.classList.contains('page-siswa-nilai')) {
+        createTableFilter("searchNilaiSiswa", "tableNilaiSiswa", [], null);
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Guru - Jadwal Mengajar
+    if (body.classList.contains('page-guru-jadwal')) {
+        createTableFilter("liveSearchInput", "tableJadwalGuru", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Guru - Absensi
+    if (body.classList.contains('page-guru-absensi')) {
+        createTableFilter("liveSearchInput", "tableAbsensiGuru", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Guru - Absensi Guru
+    if (body.classList.contains('page-guru-absensi-guru')) {
+        createTableFilter("liveSearchInput", "tableRiwayatAbsensi", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Guru - Materi
+    if (body.classList.contains('page-guru-materi')) {
+        createTableFilter("liveSearchInput", "tableMateriGuru", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Guru - Nilai
+    if (body.classList.contains('page-guru-nilai')) {
+        createTableFilter("liveSearchInput", "tableNilaiGuru", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Guru - Pengumuman Kelas
+    if (body.classList.contains('page-guru-pengumuman-kelas')) {
+        createTableFilter("liveSearchInput", "tablePengumumanKelas", [], "clearSearch");
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
+    // Halaman Dashboard Guru
+    if (body.classList.contains('page-dashboard-guru')) {
+        animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
+        animateOnLoad('tbody tr', 80);
+    }
+
     // Global animations untuk semua halaman
     animateOnLoad('.stat-card', 100);
     animateOnLoad('.card', 120);

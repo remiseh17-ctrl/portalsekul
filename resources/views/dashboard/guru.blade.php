@@ -1,235 +1,356 @@
 @extends('layouts.app')
 
+@section('page_class', 'page-dashboard-guru')
 @section('content')
-<div class="container-fluid">
-    <h1 class="mb-4 fw-bold text-primary">
-        <i class="bi bi-person-badge me-2"></i> Dashboard Guru
-    </h1>
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Main Content Container -->
+    <div class="container-fluid px-4 py-8 mt-4">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white flex items-center">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg p-2 mr-3">
+                                <i data-lucide="user-check" class="w-6 h-6 text-white"></i>
+                            </div>
+                            Dashboard Guru
+                        </h1>
+                        <p class="text-gray-600 dark:text-gray-300 mt-1">Ringkasan aktivitas dan informasi terkini</p>
+                    </div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-1 inline"></i>
+                        {{ now()->format('d F Y') }}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="row g-3 mb-4">
-        <!-- Jadwal Mengajar Hari Ini -->
-        <div class="col-12 col-lg-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white fw-semibold text-dark d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                    <div>
-                        <i class="bi bi-calendar-event me-2"></i> Jadwal Mengajar Hari Ini
+        <!-- Stats Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Jadwal Mengajar Hari Ini -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700 overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg p-2 mr-3 shadow-lg">
+                            <i data-lucide="calendar-days" class="w-5 h-5 text-white"></i>
+                        </div>
+                        Jadwal Mengajar Hari Ini
+                    </h5>
+                    <div class="relative w-full sm:w-auto">
+                        <input type="text" id="searchJadwal" class="w-full sm:w-[200px] pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 shadow-sm text-sm"
+                               placeholder="Cari jadwal...">
+                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500"></i>
+                        </div>
                     </div>
-                    <input type="text" id="searchJadwal" class="form-control form-control-sm" style="min-width: 200px;" placeholder="Cari jadwal...">
                 </div>
-                <div class="card-body p-0">
+                <!-- Body -->
+                <div class="p-0">
                     @if($jadwalHariIni->count())
-                        <div class="list-group list-group-flush" id="jadwalList">
+                        <div class="divide-y divide-gray-200 dark:divide-gray-600" id="jadwalList">
                             @foreach($jadwalHariIni as $jadwal)
-                                <div class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                                    <div class="flex-grow-1 min-w-0">
-                                        <i class="bi bi-easel me-1 text-secondary"></i>
-                                        <strong>{{ $jadwal->kelas->nama ?? '-' }}</strong> - 
-                                        <i class="bi bi-book me-1 text-primary"></i>
-                                        {{ $jadwal->mapel }}
-                                    </div>
-                                    <div class="text-info fw-semibold text-nowrap">
-                                        <i class="bi bi-clock me-1"></i>
-                                        {{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center text-muted py-3">
-                            <i class="bi bi-calendar-x me-2"></i>Tidak ada jadwal hari ini.
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-        
-        <!-- Absensi Terbaru -->
-        <div class="col-12 col-lg-6">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-white fw-semibold text-dark d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                    <div>
-                        <i class="bi bi-clipboard-check me-2"></i> Absensi Terbaru
-                    </div>
-                    <input type="text" id="searchAbsensi" class="form-control form-control-sm" style="min-width: 200px;" placeholder="Cari absensi...">
-                </div>
-                <div class="card-body p-0">
-                    @if($absensiTerbaru->count())
-                        <div class="list-group list-group-flush" id="absensiList">
-                            @foreach($absensiTerbaru as $absensi)
-                                <div class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                                    <div class="flex-grow-1 min-w-0">
-                                        <i class="bi bi-person-circle me-1 text-success"></i>
-                                        <strong>{{ $absensi->siswa->nama ?? '-' }}</strong>
-                                        <small class="text-muted d-block">
-                                            <i class="bi bi-easel me-1"></i>({{ $absensi->jadwal->kelas->nama ?? '-' }})
-                                        </small>
-                                    </div>
-                                    <div class="text-end text-nowrap">
-                                        <div class="fw-semibold text-{{ $absensi->status == 'Hadir' ? 'success' : ($absensi->status == 'Sakit' ? 'warning' : 'danger') }}">
-                                            {{ $absensi->status }}
+                                <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                                            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="school" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="font-semibold text-gray-900 dark:text-white truncate">
+                                                    {{ $jadwal->kelas->nama ?? '-' }}
+                                                </div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                                                    <i data-lucide="book-open" class="w-3 h-3"></i>
+                                                    {{ $jadwal->mapel }}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <small class="text-muted d-block">
-                                            <i class="bi bi-calendar me-1"></i>{{ $absensi->tanggal->format('d/m/Y') }}
-                                        </small>
+                                        <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium text-sm">
+                                            <i data-lucide="clock" class="w-4 h-4"></i>
+                                            <span>{{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     @else
-                        <div class="text-center text-muted py-3">
-                            <i class="bi bi-clipboard-x me-2"></i>Belum ada absensi terbaru.
+                        <div class="p-8 text-center">
+                            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <i data-lucide="calendar-x" class="w-8 h-8 text-gray-400 dark:text-gray-500"></i>
+                            </div>
+                            <p class="text-gray-500 dark:text-gray-400 font-medium">Tidak ada jadwal hari ini</p>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Semua jadwal mengajar telah selesai</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        
+            <!-- Absensi Terbaru -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700 overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                        <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-2 mr-3 shadow-lg">
+                            <i data-lucide="clipboard-check" class="w-5 h-5 text-white"></i>
+                        </div>
+                        Absensi Terbaru
+                    </h5>
+                    <div class="relative w-full sm:w-auto">
+                        <input type="text" id="searchAbsensi" class="w-full sm:w-[200px] pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 dark:focus:border-green-400 transition-all duration-200 shadow-sm text-sm"
+                               placeholder="Cari absensi...">
+                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Body -->
+                <div class="p-0">
+                    @if($absensiTerbaru->count())
+                        <div class="divide-y divide-gray-200 dark:divide-gray-600" id="absensiList">
+                            @foreach($absensiTerbaru as $absensi)
+                                <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                                            <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="user-check" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="font-semibold text-gray-900 dark:text-white truncate">
+                                                    {{ $absensi->siswa->nama ?? '-' }}
+                                                </div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                                                    <i data-lucide="school" class="w-3 h-3"></i>
+                                                    {{ $absensi->jadwal->kelas->nama ?? '-' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col items-end gap-1">
+                                            @php
+                                                $statusColor = $absensi->status == 'Hadir' ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800' :
+                                                              ($absensi->status == 'Sakit' ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800' :
+                                                              ($absensi->status == 'Izin' ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800' :
+                                                              'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800'));
+                                            @endphp
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $statusColor }}">
+                                                <i data-lucide="circle" class="w-2 h-2 mr-1"></i>
+                                                {{ $absensi->status }}
+                                            </span>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                                <i data-lucide="calendar" class="w-3 h-3"></i>
+                                                {{ $absensi->tanggal->format('d/m/Y') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="p-8 text-center">
+                            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <i data-lucide="clipboard-x" class="w-8 h-8 text-gray-400 dark:text-gray-500"></i>
+                            </div>
+                            <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada absensi terbaru</p>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Absensi siswa akan muncul di sini</p>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
-    </div>
     
-    <!-- Nilai Terbaru -->
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white fw-semibold text-dark d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-            <div>
-                <i class="bi bi-star me-2"></i> Nilai Terbaru
+        <!-- Nilai Terbaru -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700 overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl mb-8">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <h5 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <div class="bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg p-2 mr-3 shadow-lg">
+                        <i data-lucide="star" class="w-5 h-5 text-white"></i>
+                    </div>
+                    Nilai Terbaru
+                </h5>
+                <div class="relative w-full sm:w-auto">
+                    <input type="text" id="searchNilai" class="w-full sm:w-[200px] pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 dark:focus:ring-yellow-400 focus:border-yellow-500 dark:focus:border-yellow-400 transition-all duration-200 shadow-sm text-sm"
+                           placeholder="Cari nilai...">
+                    <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500"></i>
+                    </div>
+                </div>
             </div>
-            <input type="text" id="searchNilai" class="form-control form-control-sm" style="min-width: 200px;" placeholder="Cari nilai...">
-        </div>
-        <div class="card-body p-0">
-            @if($nilaiTerbaru->count())
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="nilaiTable">
-                        <thead class="table-light">
+            <!-- Body -->
+            <div class="overflow-x-auto">
+                @if($nilaiTerbaru->count())
+                    <table class="w-full text-sm" id="nilaiTable">
+                        <thead class="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                             <tr>
-                                <th>Siswa</th>
-                                <th>Kelas</th>
-                                <th>Jenis</th>
-                                <th class="text-center">Nilai</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
+                                    <span class="flex items-center">
+                                        <i data-lucide="user" class="w-4 h-4 text-green-500 dark:text-green-400 mr-1"></i>
+                                        Siswa
+                                    </span>
+                                </th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
+                                    <span class="flex items-center">
+                                        <i data-lucide="school" class="w-4 h-4 text-blue-500 dark:text-blue-400 mr-1"></i>
+                                        Kelas
+                                    </span>
+                                </th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
+                                    <span class="flex items-center">
+                                        <i data-lucide="file-text" class="w-4 h-4 text-purple-500 dark:text-purple-400 mr-1"></i>
+                                        Jenis
+                                    </span>
+                                </th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-900 dark:text-white">
+                                    <span class="flex items-center justify-center">
+                                        <i data-lucide="target" class="w-4 h-4 text-orange-500 dark:text-orange-400 mr-1"></i>
+                                        Nilai
+                                    </span>
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-600 bg-white dark:bg-gray-800">
                             @foreach($nilaiTerbaru as $nilai)
-                                <tr>
-                                    <td>
-                                        <i class="bi bi-person-circle me-1 text-success"></i>
-                                        <strong>{{ $nilai->siswa->nama ?? '-' }}</strong>
-                                    </td>
-                                    <td>
-                                        <i class="bi bi-easel me-1 text-secondary"></i>
-                                        {{ $nilai->jadwal->kelas->nama ?? '-' }}
-                                    </td>
-                                    <td>
-                                        <div class="text-primary">{{ ucfirst($nilai->jenis) }}</div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="fw-semibold text-{{ $nilai->nilai >= 75 ? 'success' : ($nilai->nilai >= 60 ? 'warning' : 'danger') }}">
-                                            {{ $nilai->nilai }}
+                                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                                <i data-lucide="user-check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                                            </div>
+                                            <span class="font-semibold text-gray-900 dark:text-white">{{ $nilai->siswa->nama ?? '-' }}</span>
                                         </div>
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                                <i data-lucide="school" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                                            </div>
+                                            <span class="text-gray-900 dark:text-white font-medium">{{ $nilai->jadwal->kelas->nama ?? '-' }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-800">
+                                            <i data-lucide="file-text" class="w-3 h-3 mr-1"></i>
+                                            {{ ucfirst($nilai->jenis) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-center">
+                                        @php
+                                            $nilaiColor = $nilai->nilai >= 85 ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800' :
+                                                         ($nilai->nilai >= 75 ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800' :
+                                                         ($nilai->nilai >= 60 ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800' :
+                                                         'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800'));
+                                        @endphp
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold {{ $nilaiColor }}">
+                                            <i data-lucide="target" class="w-3 h-3 mr-1"></i>
+                                            {{ $nilai->nilai }}
+                                        </span>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-            @else
-                <div class="text-center text-muted py-3">
-                    <i class="bi bi-star me-2"></i>Belum ada nilai terbaru.
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <!-- Pengumuman Admin Terbaru -->
-    <div class="card shadow-sm border-0 mt-4">
-        <div class="card-header bg-white fw-semibold text-dark d-flex justify-content-between align-items-center">
-            <div>
-                <i class="bi bi-megaphone me-2"></i> Pengumuman Admin Terbaru
+                @else
+                    <div class="p-8 text-center">
+                        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i data-lucide="star" class="w-8 h-8 text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada nilai terbaru</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Nilai siswa akan muncul di sini setelah diinput</p>
+                    </div>
+                @endif
             </div>
         </div>
-        <div class="card-body p-0">
-            @if($pengumumanAdminTerbaru->count())
-                <div class="list-group list-group-flush">
-                    @foreach($pengumumanAdminTerbaru as $p)
-                        <div class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                            <div class="fw-semibold text-dark flex-grow-1 min-w-0">
-                                <i class="bi bi-info-circle me-1 text-primary"></i>
-                                {{ $p->judul }}
+
+        <!-- Pengumuman Admin Terbaru -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700 overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50">
+                <h5 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-2 mr-3 shadow-lg">
+                        <i data-lucide="megaphone" class="w-5 h-5 text-white"></i>
+                    </div>
+                    Pengumuman Admin Terbaru
+                </h5>
+            </div>
+            <!-- Body -->
+            <div class="p-0">
+                @if($pengumumanAdminTerbaru->count())
+                    <div class="divide-y divide-gray-200 dark:divide-gray-600">
+                        @foreach($pengumumanAdminTerbaru as $p)
+                            <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                                        <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="info" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="font-semibold text-gray-900 dark:text-white truncate">
+                                                {{ $p->judul }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        <span>{{ $p->tanggal?->format('d/m/Y') ?? $p->tanggal }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <small class="text-muted text-nowrap">
-                                <i class="bi bi-calendar me-1"></i>{{ $p->tanggal?->format('d/m/Y') ?? $p->tanggal }}
-                            </small>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="p-8 text-center">
+                        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i data-lucide="megaphone" class="w-8 h-8 text-gray-400 dark:text-gray-500"></i>
                         </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="text-center text-muted py-3">
-                    <i class="bi bi-megaphone me-2"></i>Belum ada pengumuman admin.
-                </div>
-            @endif
+                        <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada pengumuman admin</p>
+                        <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Pengumuman dari admin akan muncul di sini</p>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>
 
-{{-- Style tambahan --}}
-<style>
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .container-fluid {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-        
-        .card-header {
-            padding: 1rem;
-        }
-        
-        .table-responsive {
-            font-size: 0.875rem;
-        }
-        
-        .list-group-item {
-            padding: 0.75rem 1rem;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .card-body {
-            padding: 1rem;
-        }
-        
-        .table-responsive {
-            font-size: 0.8rem;
-        }
-        
-        .list-group-item {
-            padding: 0.5rem 0.75rem;
-        }
-    }
-</style>
+<script src="{{ asset('js/page.js') }}"></script>
 
-@push('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     // Filter Jadwal
-    document.getElementById('searchJadwal').addEventListener('keyup', function() {
-        let filter = this.value.toLowerCase();
-        document.querySelectorAll('#jadwalList .list-group-item').forEach(function(item) {
-            item.style.display = item.innerText.toLowerCase().includes(filter) ? '' : 'none';
+    const searchJadwal = document.getElementById('searchJadwal');
+    if (searchJadwal) {
+        searchJadwal.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('#jadwalList > div').forEach(function(item) {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
         });
-    });
+    }
 
     // Filter Absensi
-    document.getElementById('searchAbsensi').addEventListener('keyup', function() {
-        let filter = this.value.toLowerCase();
-        document.querySelectorAll('#absensiList .list-group-item').forEach(function(item) {
-            item.style.display = item.innerText.toLowerCase().includes(filter) ? '' : 'none';
+    const searchAbsensi = document.getElementById('searchAbsensi');
+    if (searchAbsensi) {
+        searchAbsensi.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('#absensiList > div').forEach(function(item) {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
         });
-    });
+    }
 
     // Filter Nilai
-    document.getElementById('searchNilai').addEventListener('keyup', function() {
-        let filter = this.value.toLowerCase();
-        document.querySelectorAll('#nilaiTable tbody tr').forEach(function(row) {
-            row.style.display = row.innerText.toLowerCase().includes(filter) ? '' : 'none';
+    const searchNilai = document.getElementById('searchNilai');
+    if (searchNilai) {
+        searchNilai.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('#nilaiTable tbody tr').forEach(function(row) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
         });
-    });
+    }
+});
 </script>
-@endpush
 @endsection

@@ -22,9 +22,10 @@
                             <i data-lucide="graduation-cap" class="w-4 h-4 mr-1"></i>
                             {{ $gurus->total() }} Guru Terdaftar
                         </div>
-                        <button type="button" 
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium" 
-                                data-bs-toggle="modal" data-bs-target="#modalCreateGuru">
+                        <button type="button"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalCreateGuru">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                             <span>Tambah Guru</span>
                         </button>
@@ -251,12 +252,8 @@
     </div>
 </div>
 
-    
-
 {{-- Include Modal Create Guru --}}
 @include('guru.create-modal')
-
-
 
 {{-- Include Modal Edit Guru --}}
 @foreach($gurus as $guru)
