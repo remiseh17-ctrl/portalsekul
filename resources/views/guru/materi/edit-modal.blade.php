@@ -15,10 +15,10 @@
           </button>
         </div>
         <div class="modal-body overflow-y-auto max-h-[70vh]">
-          <!-- Jadwal Selection -->
+          <!-- Kelas Selection -->
           <div class="mb-6">
             <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
-              Pilih Jadwal Mengajar <span class="text-red-500">*</span>
+              Pilih Kelas <span class="text-red-500">*</span>
             </label>
             <div class="mb-3 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg">
               <div class="flex items-center">
@@ -26,26 +26,39 @@
                   <i data-lucide="info" class="w-3 h-3 text-yellow-600 dark:text-yellow-400"></i>
                 </div>
                 <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                  <strong>Pilih jadwal mengajar untuk memperbarui materi.</strong>
-                  Materi akan otomatis disesuaikan dengan kelas sesuai jadwal yang dipilih.
+                  <strong>Pilih satu atau lebih kelas untuk memperbarui materi.</strong>
+                  Materi akan dapat diakses oleh semua siswa di kelas yang dipilih.
                 </p>
               </div>
             </div>
-            <select name="jadwal_id" class="form-select mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-yellow-500 focus:border-yellow-500 transition" required>
-              <option value="">Pilih Jadwal Mengajar</option>
+            <div class="max-h-40 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-700">
               @php
-                $jadwals = \App\Models\Jadwal::where('guru_id', auth()->user()->guru->id ?? 0)
-                  ->with('kelas')
-                  ->get();
+                // Ambil kelas yang sudah dipilih untuk materi ini
+                $selectedKelasIds = [];
+                if ($materi->kelas_id) {
+                  $selectedKelasIds[] = $materi->kelas_id;
+                }
+                if ($materi->shared_kelas) {
+                  $selectedKelasIds = array_merge($selectedKelasIds, $materi->shared_kelas);
+                }
               @endphp
-              @forelse($jadwals as $jadwal)
-                <option value="{{ $jadwal->id }}" @selected(old('jadwal_id', $materi->jadwal_id) == $jadwal->id)>
-                  {{ $jadwal->mapel }} - {{ $jadwal->kelas->nama ?? 'Kelas tidak ditemukan' }} ({{ $jadwal->hari }} {{ $jadwal->jam_mulai }}-{{ $jadwal->jam_selesai }})
-                </option>
+              @forelse($availableKelas as $kelas)
+                <div class="flex items-center mb-2">
+                  <input type="checkbox" name="kelas_ids[]" value="{{ $kelas->id }}"
+                         id="edit_kelas_{{ $materi->id }}_{{ $kelas->id }}"
+                         class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                         {{ in_array($kelas->id, $selectedKelasIds) ? 'checked' : '' }}>
+                  <label for="edit_kelas_{{ $materi->id }}_{{ $kelas->id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    {{ $kelas->nama }}
+                  </label>
+                </div>
               @empty
-                <option value="" disabled>Tidak ada jadwal mengajar tersedia</option>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Tidak ada kelas tersedia</p>
               @endforelse
-            </select>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              Pilih minimal satu kelas. Materi akan dapat diakses oleh siswa di semua kelas yang dipilih.
+            </p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -55,8 +68,6 @@
             </div>
           </div>
 
-          <!-- Hidden mapel field that will be auto-filled -->
-          <input type="hidden" name="mapel" id="auto_mapel_edit_{{ $materi->id }}" value="{{ old('mapel', $materi->mapel) }}">
 
           <div class="mt-4">
             <label class="block text-gray-700 dark:text-gray-300 font-semibold">Deskripsi Materi</label>
@@ -76,6 +87,7 @@
                 <div>
                   <p class="text-gray-600 dark:text-gray-300">Upload file baru jika ingin mengganti</p>
                   <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Format: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX (Max: 10MB)</p>
+                  <p class="text-xs text-amber-600 dark:text-amber-400 mt-2">💡 Jika file > 10MB, gunakan Link Drive di bawah</p>
                 </div>
                 <input type="file" name="file_materi" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx">
                 <button type="button" onclick="document.querySelector('input[name=file_materi]').click()" class="px-4 py-2 bg-yellow-600 dark:bg-yellow-500 text-white rounded-lg hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-colors">
@@ -90,6 +102,15 @@
             <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
               <p>File saat ini: <span class="font-medium">{{ $materi->file ? basename($materi->file) : 'Tidak ada file' }}</span></p>
             </div>
+          </div>
+
+          <!-- Link Drive -->
+          <div class="mt-4">
+            <label class="block text-gray-700 dark:text-gray-300 font-semibold">Link Drive (Opsional)</label>
+            <input type="url" name="link_drive" value="{{ old('link_drive', $materi->link_drive) }}"
+                   placeholder="https://drive.google.com/file/..."
+                   class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-yellow-500 focus:border-yellow-500 transition">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gunakan link ini jika file terlalu besar untuk diupload langsung</p>
           </div>
 
           <div class="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 p-3 rounded-lg mt-4 text-sm">
@@ -128,69 +149,53 @@ document.querySelector('input[name=file_materi]').addEventListener('change', fun
     }
 });
 
-// Auto-fill mapel when jadwal is selected
-document.querySelector('select[name=jadwal_id]').addEventListener('change', function() {
-    const jadwalId = this.value;
-    const mapelField = document.getElementById('auto_mapel_edit_{{ $materi->id }}');
-    
-    if (jadwalId) {
-        const selectedOption = this.options[this.selectedIndex];
-        const mapelText = selectedOption.textContent.split(' - ')[0];
-        
-        // Auto-fill the hidden mapel field
-        mapelField.value = mapelText;
-        
-        // Show info about selected mapel
-        const infoDiv = document.querySelector('.bg-yellow-50');
-        if (infoDiv) {
-            infoDiv.innerHTML = `
-                <div class="flex items-center">
-                    <div class="w-5 h-5 bg-yellow-100 dark:bg-yellow-900/50 rounded-full flex items-center justify-center mr-2">
-                        <i data-lucide="check-circle" class="w-3 h-3 text-yellow-600 dark:text-yellow-400"></i>
-                    </div>
-                    <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                        <strong>Mata Pelajaran: ${mapelText}</strong><br>
-                        Materi akan otomatis disesuaikan dengan kelas sesuai jadwal yang dipilih.
-                    </p>
-                </div>
-            `;
-        }
-    } else {
-        // Reset mapel field and show original info
-        mapelField.value = '';
-        const infoDiv = document.querySelector('.bg-yellow-50');
-        if (infoDiv) {
-            infoDiv.innerHTML = `
-                <div class="flex items-center">
-                    <div class="w-5 h-5 bg-yellow-100 dark:bg-violet-900/50 rounded-full flex items-center justify-center mr-2">
-                        <i data-lucide="info" class="w-3 h-3 text-yellow-600 dark:text-yellow-400"></i>
-                    </div>
-                    <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                        <strong>Pilih jadwal mengajar untuk memperbarui materi.</strong>
-                        Materi akan otomatis disesuaikan dengan kelas sesuai jadwal yang dipilih.
-                    </p>
-                </div>
-            `;
-        }
-    }
-});
-
-// Show current mapel info when modal opens
+// Validasi checkbox kelas untuk edit modal
 document.addEventListener('DOMContentLoaded', function() {
-    const currentMapel = '{{ $materi->mapel }}';
-    const infoDiv = document.querySelector('.bg-yellow-50');
-    if (infoDiv && currentMapel) {
-        infoDiv.innerHTML = `
-            <div class="flex items-center">
-                <div class="w-5 h-5 bg-yellow-100 dark:bg-yellow-900/50 rounded-full flex items-center justify-center mr-2">
-                    <i data-lucide="info" class="w-3 h-3 text-yellow-600 dark:text-yellow-400"></i>
-                </div>
-                <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                    <strong>Mata Pelajaran Saat Ini: ${currentMapel}</strong><br>
-                    Pilih jadwal mengajar untuk memperbarui materi.
-                </p>
-            </div>
-        `;
+    // Update info ketika checkbox berubah
+    const modal = document.getElementById('modalEditMateri{{ $materi->id }}');
+    if (modal) {
+        const checkboxes = modal.querySelectorAll('input[name="kelas_ids[]"]');
+        const infoDiv = modal.querySelector('.bg-yellow-50');
+
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const checkedBoxes = modal.querySelectorAll('input[name="kelas_ids[]"]:checked');
+
+                if (checkedBoxes.length > 0) {
+                    const kelasNames = Array.from(checkedBoxes).map(cb => {
+                        return cb.nextElementSibling.textContent.trim();
+                    }).join(', ');
+
+                    if (infoDiv) {
+                        infoDiv.innerHTML = `
+                            <div class="flex items-center">
+                                <div class="w-5 h-5 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mr-2">
+                                    <i data-lucide="check-circle" class="w-3 h-3 text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <p class="text-sm text-green-800 dark:text-green-200">
+                                    <strong>${checkedBoxes.length} kelas dipilih:</strong> ${kelasNames}<br>
+                                    Materi akan dapat diakses oleh siswa di kelas yang dipilih.
+                                </p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    if (infoDiv) {
+                        infoDiv.innerHTML = `
+                            <div class="flex items-center">
+                                <div class="w-5 h-5 bg-yellow-100 dark:bg-yellow-900/50 rounded-full flex items-center justify-center mr-2">
+                                    <i data-lucide="info" class="w-3 h-3 text-yellow-600 dark:text-yellow-400"></i>
+                                </div>
+                                <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                    <strong>Pilih satu atau lebih kelas untuk memperbarui materi.</strong>
+                                    Materi akan dapat diakses oleh semua siswa di kelas yang dipilih.
+                                </p>
+                            </div>
+                        `;
+                    }
+                }
+            });
+        });
     }
 });
 </script>

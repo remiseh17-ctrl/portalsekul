@@ -31,10 +31,10 @@
             </div>
           @endif
 
-          <!-- Jadwal Selection -->
+          <!-- Kelas Selection -->
           <div class="mb-6">
             <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
-              Pilih Jadwal Mengajar <span class="text-red-500">*</span>
+              Pilih Kelas <span class="text-red-500">*</span>
             </label>
             <div class="mb-3 p-3 bg-violet-50 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-800 rounded-lg">
               <div class="flex items-center">
@@ -42,26 +42,28 @@
                   <i data-lucide="info" class="w-3 h-3 text-violet-600 dark:text-violet-400"></i>
                 </div>
                 <p class="text-sm text-violet-800 dark:text-violet-200">
-                  <strong>Pilih jadwal mengajar Anda untuk mengupload materi.</strong>
-                  Materi akan otomatis diupload ke kelas sesuai jadwal yang dipilih.
+                  <strong>Pilih satu atau lebih kelas untuk mengupload materi.</strong>
+                  Materi akan dapat diakses oleh semua siswa di kelas yang dipilih.
                 </p>
               </div>
             </div>
-            <select name="jadwal_id" class="form-select mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-violet-500 focus:border-violet-500 transition" required>
-              <option value="">Pilih Jadwal Mengajar</option>
-              @php
-                $jadwals = \App\Models\Jadwal::where('guru_id', auth()->user()->guru->id ?? 0)
-                  ->with('kelas')
-                  ->get();
-              @endphp
-              @forelse($jadwals as $jadwal)
-                <option value="{{ $jadwal->id }}">
-                  {{ $jadwal->mapel }} - {{ $jadwal->kelas->nama ?? 'Kelas tidak ditemukan' }} ({{ $jadwal->hari }} {{ $jadwal->jam_mulai }}-{{ $jadwal->jam_selesai }})
-                </option>
+            <div class="max-h-40 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-lg p-3 bg-white dark:bg-gray-700">
+              @forelse($availableKelas as $kelas)
+                <div class="flex items-center mb-2">
+                  <input type="checkbox" name="kelas_ids[]" value="{{ $kelas->id }}"
+                         id="kelas_{{ $kelas->id }}"
+                         class="w-4 h-4 text-violet-600 bg-gray-100 border-gray-300 rounded focus:ring-violet-500 dark:focus:ring-violet-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                  <label for="kelas_{{ $kelas->id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    {{ $kelas->nama }}
+                  </label>
+                </div>
               @empty
-                <option value="" disabled>Tidak ada jadwal mengajar tersedia</option>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Tidak ada kelas tersedia</p>
               @endforelse
-            </select>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              Pilih minimal satu kelas. Materi akan dapat diakses oleh siswa di semua kelas yang dipilih.
+            </p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -72,8 +74,6 @@
             </div>
           </div>
 
-          <!-- Hidden mapel field that will be auto-filled -->
-          <input type="hidden" name="mapel" id="auto_mapel" value="">
 
           <!-- Deskripsi -->
           <div class="mt-4">
@@ -84,7 +84,7 @@
           <!-- File Upload -->
           <div class="mt-4">
             <label class="block text-gray-700 dark:text-gray-300 font-semibold">
-              Upload File Materi <span class="text-red-500">*</span>
+              Upload File Materi
             </label>
             <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-violet-400 dark:hover:border-violet-500 transition-colors">
               <div class="space-y-4">
@@ -94,8 +94,9 @@
                 <div>
                   <p class="text-gray-600 dark:text-gray-300">Drag & drop file atau klik untuk upload</p>
                   <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Format: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX (Max: 10MB)</p>
+                  <p class="text-xs text-amber-600 dark:text-amber-400 mt-2">💡 Jika file > 10MB, gunakan Link Drive di bawah</p>
                 </div>
-                <input type="file" name="file_materi" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" required>
+                <input type="file" name="file_materi" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx">
                 <button type="button" onclick="document.querySelector('input[name=file_materi]').click()" class="px-4 py-2 bg-violet-600 dark:bg-violet-500 text-white rounded-lg hover:bg-violet-700 dark:hover:bg-violet-600 transition-colors">
                   Pilih File
                 </button>
@@ -105,6 +106,15 @@
                 <p>Ukuran: <span id="file-size" class="font-medium"></span></p>
               </div>
             </div>
+          </div>
+
+          <!-- Link Drive -->
+          <div class="mt-4">
+            <label class="block text-gray-700 dark:text-gray-300 font-semibold">Link Drive (Opsional)</label>
+            <input type="url" name="link_drive" value="{{ old('link_drive') }}"
+                   placeholder="https://drive.google.com/file/..."
+                   class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-violet-500 focus:border-violet-500 transition">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gunakan link ini jika file terlalu besar untuk diupload langsung</p>
           </div>
 
           <div class="bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 p-3 rounded-lg mt-4 text-sm">
@@ -147,50 +157,55 @@ document.querySelector('input[name=file_materi]').addEventListener('change', fun
     }
 });
 
-// Auto-fill mapel when jadwal is selected
-document.querySelector('select[name=jadwal_id]').addEventListener('change', function() {
-    const jadwalId = this.value;
-    const mapelField = document.getElementById('auto_mapel');
-    
-    if (jadwalId) {
-        const selectedOption = this.options[this.selectedIndex];
-        const mapelText = selectedOption.textContent.split(' - ')[0];
-        
-        // Auto-fill the hidden mapel field
-        mapelField.value = mapelText;
-        
-        // Show info about selected mapel
-        const infoDiv = document.querySelector('.bg-violet-50');
-        if (infoDiv) {
-            infoDiv.innerHTML = `
-                <div class="flex items-center">
-                    <div class="w-5 h-5 bg-violet-100 dark:bg-violet-900/50 rounded-full flex items-center justify-center mr-2">
-                        <i data-lucide="check-circle" class="w-3 h-3 text-violet-600 dark:text-violet-400"></i>
-                    </div>
-                    <p class="text-sm text-violet-800 dark:text-violet-200">
-                        <strong>Mata Pelajaran: ${mapelText}</strong><br>
-                        Materi akan diupload untuk kelas sesuai jadwal yang dipilih.
-                    </p>
-                </div>
-            `;
-        }
-    } else {
-        // Reset mapel field and show original info
-        mapelField.value = '';
-        const infoDiv = document.querySelector('.bg-violet-50');
-        if (infoDiv) {
-            infoDiv.innerHTML = `
-                <div class="flex items-center">
-                    <div class="w-5 h-5 bg-violet-100 dark:bg-violet-900/50 rounded-full flex items-center justify-center mr-2">
-                        <i data-lucide="info" class="w-3 h-3 text-violet-600 dark:text-violet-400"></i>
-                    </div>
-                    <p class="text-sm text-violet-800 dark:text-violet-200">
-                        <strong>Pilih jadwal mengajar Anda untuk mengupload materi.</strong>
-                        Materi akan otomatis diupload ke kelas sesuai jadwal yang dipilih.
-                    </p>
-                </div>
-            `;
-        }
+// Validasi checkbox kelas
+document.querySelector('form').addEventListener('submit', function(e) {
+    const checkboxes = document.querySelectorAll('input[name="kelas_ids[]"]:checked');
+    if (checkboxes.length === 0) {
+        e.preventDefault();
+        alert('Pilih minimal satu kelas untuk mengupload materi.');
+        return false;
     }
+});
+
+// Update info ketika checkbox berubah
+document.querySelectorAll('input[name="kelas_ids[]"]').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        const checkedBoxes = document.querySelectorAll('input[name="kelas_ids[]"]:checked');
+        const infoDiv = document.querySelector('.bg-violet-50');
+
+        if (checkedBoxes.length > 0) {
+            const kelasNames = Array.from(checkedBoxes).map(cb => {
+                return cb.nextElementSibling.textContent.trim();
+            }).join(', ');
+
+            if (infoDiv) {
+                infoDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-5 h-5 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mr-2">
+                            <i data-lucide="check-circle" class="w-3 h-3 text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <p class="text-sm text-green-800 dark:text-green-200">
+                            <strong>${checkedBoxes.length} kelas dipilih:</strong> ${kelasNames}<br>
+                            Materi akan dapat diakses oleh siswa di kelas yang dipilih.
+                        </p>
+                    </div>
+                `;
+            }
+        } else {
+            if (infoDiv) {
+                infoDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-5 h-5 bg-violet-100 dark:bg-violet-900/50 rounded-full flex items-center justify-center mr-2">
+                            <i data-lucide="info" class="w-3 h-3 text-violet-600 dark:text-violet-400"></i>
+                        </div>
+                        <p class="text-sm text-violet-800 dark:text-violet-200">
+                            <strong>Pilih satu atau lebih kelas untuk mengupload materi.</strong>
+                            Materi akan dapat diakses oleh semua siswa di kelas yang dipilih.
+                        </p>
+                    </div>
+                `;
+            }
+        }
+    });
 });
 </script>

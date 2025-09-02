@@ -24,40 +24,32 @@
             <form id="createPengumumanForm" method="POST" action="{{ route('pengumuman-kelas.store') }}">
                 @csrf
 
-                <!-- Kelas Selection -->
+                <!-- Kelas Wali Info -->
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        Pilih Kelas Tujuan <span class="text-red-500">*</span>
+                        Kelas Tujuan Pengumuman
                     </label>
-                    {{-- Debug: @if(isset($kelas)) Kelas count: {{ $kelas->count() ?? 0 }} @endif --}}
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        @if(isset($kelas) && $kelas->count() > 0)
-                            @foreach($kelas as $k)
-                            <label class="relative">
-                                <input type="radio" name="kelas_id" value="{{ $k->id }}"
-                                       class="sr-only peer" required>
-                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-indigo-500 peer-checked:bg-indigo-50 transition-all hover:border-indigo-300">
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <i data-lucide="school" class="w-4 h-4 text-indigo-500"></i>
-                                        <div class="text-center">
-                                            <div class="font-semibold text-gray-900">{{ $k->nama_kelas }}</div>
-                                            <div class="text-sm text-gray-600">{{ $k->wali_kelas }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-                            @endforeach
-                        @else
-                        <div class="col-span-full text-center py-8">
-                            <div class="text-gray-500">
-                                <i data-lucide="school" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
-                                <p class="font-medium">Tidak ada kelas yang tersedia</p>
-                                <p class="text-sm text-gray-400 mt-1">Anda belum memiliki jadwal mengajar di kelas manapun</p>
-                            </div>
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="info" class="w-5 h-5 text-indigo-600"></i>
+                            <span class="text-sm font-medium text-indigo-800">Pengumuman akan dikirim ke kelas wali Anda:</span>
                         </div>
-                        @endif
+                        <div class="flex flex-wrap gap-2">
+                            @if(isset($kelasWali) && $kelasWali->count() > 0)
+                                @foreach($kelasWali as $kelas)
+                                <div class="inline-flex items-center space-x-2 bg-white border border-indigo-300 rounded-lg px-3 py-2">
+                                    <i data-lucide="school" class="w-4 h-4 text-indigo-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">{{ $kelas->nama }}</span>
+                                </div>
+                                @endforeach
+                            @else
+                                <div class="text-sm text-gray-600">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 inline mr-1"></i>
+                                    Anda tidak memiliki kelas wali
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                    <x-input-error :messages="$errors->get('kelas_id')" class="mt-2" />
                 </div>
 
                 <!-- Pengumuman Details -->

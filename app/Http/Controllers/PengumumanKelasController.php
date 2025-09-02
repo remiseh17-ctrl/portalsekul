@@ -26,38 +26,38 @@ class PengumumanKelasController extends Controller
             ->orderBy('tanggal', 'desc')
             ->paginate(15);
 
-        // Ambil kelas yang diajar guru untuk modal
-        $kelas = Kelas::whereHas('jadwals', function($query) use ($guru) {
-            $query->where('guru_id', $guru->id);
-        })->get();
+        // Ambil kelas yang diwalikan guru
+        $kelasWali = $guru->kelasWali;
 
-        // Jika tidak ada kelas, beri pesan peringatan
-        $kelasCount = $kelas->count();
+        // Jika tidak ada kelas wali, beri pesan peringatan
+        $kelasWaliCount = $kelasWali->count();
 
-        return view('guru.pengumuman-kelas.index', compact('pengumumanKelas', 'kelas', 'kelasCount'));
+        return view('guru.pengumuman-kelas.index', compact('pengumumanKelas', 'kelasWali', 'kelasWaliCount'));
     }
 
     public function create()
     {
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
-        
+
         if (!$guru) {
             return redirect()->route('dashboard')->with('error', 'Data guru tidak ditemukan.');
         }
 
-        // Ambil kelas yang diajar guru
-        $kelasList = Kelas::whereHas('jadwals', function($query) use ($guru) {
-            $query->where('guru_id', $guru->id);
-        })->get();
-            
-        return view('guru.pengumuman-kelas.create', compact('kelasList'));
+        // Cek apakah guru memiliki kelas wali
+        $kelasWali = $guru->kelasWali;
+
+        if ($kelasWali->isEmpty()) {
+            return redirect()->route('pengumuman-kelas.index')
+                ->with('error', 'Anda tidak memiliki kelas wali. Hanya wali kelas yang dapat membuat pengumuman kelas.');
+        }
+
+        return view('guru.pengumuman-kelas.create', compact('kelasWali'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'kelas_id' => 'required|exists:kelas,id',
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
         ]);
@@ -65,18 +65,30 @@ class PengumumanKelasController extends Controller
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
 
-        $data = $request->only([
-            'kelas_id',
-            'judul',
-            'isi'
-        ]);
-        $data['guru_id'] = $guru->id;
-        $data['tanggal'] = now()->format('Y-m-d');
+        if (!$guru) {
+            return redirect()->back()->with('error', 'Data guru tidak ditemukan.');
+        }
 
-        PengumumanKelas::create($data);
+        // Ambil kelas wali guru
+        $kelasWali = $guru->kelasWali;
+
+        if ($kelasWali->isEmpty()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki kelas wali.');
+        }
+
+        // Buat pengumuman untuk setiap kelas wali
+        foreach ($kelasWali as $kelas) {
+            PengumumanKelas::create([
+                'kelas_id' => $kelas->id,
+                'guru_id' => $guru->id,
+                'judul' => $request->judul,
+                'isi' => $request->isi,
+                'tanggal' => now()->format('Y-m-d'),
+            ]);
+        }
 
         return redirect()->route('pengumuman-kelas.index')
-            ->with('success', 'Pengumuman kelas berhasil ditambahkan!');
+            ->with('success', 'Pengumuman kelas berhasil ditambahkan untuk semua kelas wali Anda!');
     }
 
     public function show(PengumumanKelas $pengumumanKelas)

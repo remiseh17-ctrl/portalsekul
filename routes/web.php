@@ -15,6 +15,8 @@ use App\Http\Controllers\PengumumanKelasController;
 use App\Http\Controllers\SiswaJadwalController;
 use App\Http\Controllers\SiswaNilaiController;
 use App\Http\Controllers\SiswaAbsensiController;
+use App\Http\Controllers\SiswaTugasController;
+use App\Http\Controllers\GuruTugasController;
 use App\Http\Controllers\JenisPenilaianController;
 
 Route::get('/', function () {
@@ -69,9 +71,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Materi
         Route::resource('materi', MateriController::class);
-        
+
+        // Cek Tugas Siswa
+        Route::get('tugas', [GuruTugasController::class, 'index'])->name('guru.tugas.index');
+        Route::get('tugas/{submission}', [GuruTugasController::class, 'show'])->name('guru.tugas.show');
+        Route::patch('tugas/{submission}/status', [GuruTugasController::class, 'updateStatus'])->name('guru.tugas.update-status');
+        Route::patch('tugas/bulk-update', [GuruTugasController::class, 'bulkUpdateStatus'])->name('guru.tugas.bulk-update');
+
         // Pengumuman kelas
         Route::resource('pengumuman-kelas', PengumumanKelasController::class);
+
+        // Cek Tugas Siswa
+        Route::get('tugas', [GuruTugasController::class, 'index'])->name('guru.tugas.index');
+        Route::get('tugas/{submission}', [GuruTugasController::class, 'show'])->name('guru.tugas.show');
+        Route::patch('tugas/{submission}/status', [GuruTugasController::class, 'updateStatus'])->name('guru.tugas.update-status');
     });
 });
 
@@ -91,7 +104,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Materi
         Route::get('materi-siswa', [MateriController::class, 'materiSiswa'])->name('siswa.materi');
-        
+
+        // Submit Tugas
+        Route::post('submit-tugas', [SiswaTugasController::class, 'submitTugas'])->name('siswa.submit-tugas');
+
         // Pengumuman
         Route::get('pengumuman-siswa', [PengumumanKelasController::class, 'pengumumanSiswa'])->name('siswa.pengumuman');
     });

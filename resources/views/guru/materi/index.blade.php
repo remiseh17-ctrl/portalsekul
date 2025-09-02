@@ -23,7 +23,12 @@
                             <i data-lucide="file-text" class="w-4 h-4 mr-1"></i>
                             {{ $materis->total() }} Materi
                         </div>
-                        <button type="button" 
+                        <a href="{{ route('guru.tugas.index') }}"
+                           class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
+                            <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                            <span>Cek Tugas Siswa</span>
+                        </a>
+                        <button type="button"
                                 class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium"
                                 data-bs-toggle="modal" data-bs-target="#modalCreateMateri">
                             <i data-lucide="plus" class="w-5 h-5"></i>
@@ -129,19 +134,13 @@
                             <th class="px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
                                 <span class="flex items-center">
                                     <i data-lucide="school" class="w-4 h-4 text-blue-500 dark:text-blue-400 mr-1"></i>
-                                    Kelas
-                                </span>
-                            </th>
-                            <th class="px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
-                                <span class="flex items-center">
-                                    <i data-lucide="book-open" class="w-4 h-4 text-orange-500 dark:text-orange-400 mr-1"></i>
-                                    Mata Pelajaran
+                                    Kelas Tujuan
                                 </span>
                             </th>
                             <th class="px-4 py-3 text-left font-semibold text-gray-900 dark:text-white">
                                 <span class="flex items-center">
                                     <i data-lucide="download" class="w-4 h-4 text-indigo-500 dark:text-indigo-400 mr-1"></i>
-                                    File
+                                    File/Link
                                 </span>
                             </th>
                             <th class="px-4 py-3 text-center font-semibold text-gray-900 dark:text-white">
@@ -176,34 +175,47 @@
                                     <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-3">
                                         <i data-lucide="school" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
                                     </div>
-                                    <span class="text-gray-900 dark:text-white font-medium">{{ $materi->kelas->nama ?? '-' }}</span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-3">
-                                        <i data-lucide="book-open" class="w-4 h-4 text-orange-600 dark:text-orange-400"></i>
-                                    </div>
                                     <div class="flex flex-col">
-                                        <span class="text-gray-900 dark:text-white font-medium">{{ $materi->jadwal->mapel ?? '-' }}</span>
-                                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ $materi->jadwal->hari ?? '-' }} {{ $materi->jadwal->jam_mulai ?? '' }}-{{ $materi->jadwal->jam_selesai ?? '' }}</span>
+                                        @php
+                                            $allKelas = $materi->getAllKelas();
+                                        @endphp
+                                        @if($allKelas->count() > 0)
+                                            @foreach($allKelas as $kelas)
+                                                <span class="inline-block bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded-full mr-1 mb-1">
+                                                    {{ $kelas->nama }}
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            <span class="text-gray-500 dark:text-gray-400">-</span>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
                             <td class="px-4 py-4">
-                                @if($materi->file)
-                                    <a href="{{ Storage::url($materi->file) }}"
-                                       class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium text-sm"
-                                       target="_blank" title="Download File">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                        <span>Download</span>
-                                    </a>
-                                @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-900/50 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-800">
-                                        <i data-lucide="minus" class="w-3 h-3 mr-1"></i>
-                                        Tidak ada file
-                                    </span>
-                                @endif
+                                <div class="flex flex-col gap-2">
+                                    @if($materi->file)
+                                        <a href="{{ Storage::url($materi->file) }}"
+                                           class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium text-sm"
+                                           target="_blank" title="Download File">
+                                            <i data-lucide="download" class="w-4 h-4"></i>
+                                            <span>Download File</span>
+                                        </a>
+                                    @endif
+                                    @if($materi->link_drive)
+                                        <a href="{{ $materi->link_drive }}"
+                                           class="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium text-sm"
+                                           target="_blank" title="Buka Link Drive">
+                                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                                            <span>Link Drive</span>
+                                        </a>
+                                    @endif
+                                    @if(!$materi->file && !$materi->link_drive)
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-900/50 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-800">
+                                            <i data-lucide="minus" class="w-3 h-3 mr-1"></i>
+                                            Tidak ada file
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-4 py-4">
                                 <div class="flex justify-center gap-2">
@@ -231,7 +243,7 @@
                         </tr>
                         @empty
                         <tr class="bg-white dark:bg-gray-800">
-                            <td colspan="6" class="px-4 py-12 text-center">
+                            <td colspan="5" class="px-4 py-12 text-center">
                                 <div class="flex flex-col items-center">
                                     <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
                                         <i data-lucide="file-x" class="w-8 h-8 text-gray-400 dark:text-gray-500"></i>
@@ -271,7 +283,7 @@ document.body.classList.add('page-guru-materi');
 
 {{-- Include Modal Edit Materi --}}
 @foreach($materis as $materi)
-    @include('guru.materi.edit-modal', ['materi' => $materi])
+    @include('guru.materi.edit-modal', ['materi' => $materi, 'availableKelas' => $availableKelas])
 @endforeach
 
 {{-- Include Modal View Materi --}}

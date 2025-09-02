@@ -23,7 +23,7 @@
                             <i data-lucide="megaphone" class="w-4 h-4 mr-1"></i>
                             {{ $pengumumanKelas->total() }} Pengumuman
                         </div>
-                        @if($kelasCount > 0)
+                        @if($kelasWaliCount > 0)
                         <button onclick="openCreatePengumumanModal()"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
                             <i data-lucide="plus" class="w-5 h-5"></i>
@@ -61,7 +61,7 @@
         </div>
         @endif
 
-        @if($kelasCount == 0)
+        @if($kelasWaliCount == 0)
         <div class="mb-6">
             <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 shadow-sm">
                 <div class="flex items-center">
@@ -70,7 +70,7 @@
                     </div>
                     <div>
                         <p class="font-semibold text-yellow-800 dark:text-yellow-200">Peringatan!</p>
-                        <p class="text-yellow-700 dark:text-yellow-300 text-sm">Anda belum memiliki jadwal mengajar di kelas manapun. Silakan hubungi administrator untuk menambahkan jadwal mengajar Anda.</p>
+                        <p class="text-yellow-700 dark:text-yellow-300 text-sm">Anda belum ditetapkan sebagai wali kelas manapun. Hanya wali kelas yang dapat membuat pengumuman kelas. Silakan hubungi administrator untuk menjadikan Anda sebagai wali kelas.</p>
                     </div>
                 </div>
             </div>
@@ -243,8 +243,8 @@
 </div>
 
 <!-- Include Modal Files -->
-@include('guru.pengumuman-kelas.create-modal', ['kelas' => $kelas])
-@include('guru.pengumuman-kelas.edit-modal', ['kelas' => $kelas])
+@include('guru.pengumuman-kelas.create-modal', ['kelasWali' => $kelasWali])
+@include('guru.pengumuman-kelas.edit-modal', ['kelasWali' => $kelasWali])
 @include('guru.pengumuman-kelas.view-modal')
 
 <script>

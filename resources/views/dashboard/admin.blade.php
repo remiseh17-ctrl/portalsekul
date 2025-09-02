@@ -301,5 +301,35 @@
     </div>
 </div>
 
-<script src="{{ asset('js/page.js') }}"></script>
+<script>
+// Search functionality for Jadwal
+document.getElementById('searchJadwal').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#tableJadwal tbody tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+// Search functionality for Pengumuman
+document.getElementById('searchPengumuman').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const items = document.querySelectorAll('#tablePengumuman > div');
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+</script>
 @endsection
