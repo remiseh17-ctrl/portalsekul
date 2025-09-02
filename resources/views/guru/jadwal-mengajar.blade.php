@@ -124,7 +124,7 @@
                         @forelse($jadwals as $index => $jadwal)
                         <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                             <td class="px-4 py-4 text-center text-gray-900 dark:text-white font-medium">
-                                {{ $jadwals->firstItem() + $index }}
+                                {{ method_exists($jadwals, 'firstItem') ? $jadwals->firstItem() + $index : $index + 1 }}
                             </td>
                             <td class="px-4 py-4">
                                 <div class="flex items-center">

@@ -15,7 +15,7 @@ class MateriController extends Controller
     {
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
-        
+
         if (!$guru) {
             return redirect()->route('dashboard')->with('error', 'Data guru tidak ditemukan.');
         }
@@ -25,8 +25,16 @@ class MateriController extends Controller
             ->with(['jadwal.kelas', 'kelas'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-            
-        return view('guru.materi.index', compact('materis'));
+
+        // Ambil kelas yang ada di jadwal mengajar guru
+        $kelas = Jadwal::where('guru_id', $guru->id)
+            ->with('kelas')
+            ->get()
+            ->pluck('kelas')
+            ->unique('id')
+            ->sortBy('nama');
+
+        return view('guru.materi.index', compact('materis', 'kelas'));
     }
 
     public function create()
@@ -50,27 +58,47 @@ class MateriController extends Controller
     {
         $request->validate([
             'jadwal_id' => 'required|exists:jadwals,id',
-            'kelas_id' => 'required|exists:kelas,id',
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,txt|max:2048',
+            'file_materi' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx|max:10240',
         ]);
 
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
 
-        $data = $request->all();
-        $data['guru_id'] = $guru->id;
-
-        // Upload file jika ada
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('materi', $fileName, 'public');
-            $data['file'] = $filePath;
+        if (!$guru) {
+            return redirect()->back()->with('error', 'Data guru tidak ditemukan.');
         }
 
-        Materi::create($data);
+        // Validasi bahwa jadwal yang dipilih milik guru ini
+        $jadwal = Jadwal::where('id', $request->jadwal_id)
+            ->where('guru_id', $guru->id)
+            ->with('kelas')
+            ->first();
+
+        if (!$jadwal) {
+            return redirect()->back()
+                ->with('error', 'Jadwal yang dipilih tidak valid atau bukan jadwal mengajar Anda.')
+                ->withInput();
+        }
+
+        // Upload file jika ada
+        $filePath = null;
+        if ($request->hasFile('file_materi')) {
+            $file = $request->file('file_materi');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('materi', $fileName, 'public');
+        }
+
+        // Simpan materi
+        Materi::create([
+            'guru_id' => $guru->id,
+            'jadwal_id' => $jadwal->id,
+            'kelas_id' => $jadwal->kelas_id,
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'file' => $filePath,
+        ]);
 
         return redirect()->route('materi.index')
             ->with('success', 'Materi berhasil ditambahkan!');
@@ -85,7 +113,7 @@ class MateriController extends Controller
     {
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
-        
+
         if (!$guru) {
             return redirect()->route('dashboard')->with('error', 'Data guru tidak ditemukan.');
         }
@@ -94,36 +122,67 @@ class MateriController extends Controller
         $jadwals = Jadwal::where('guru_id', $guru->id)
             ->with(['kelas'])
             ->get();
-            
-        return view('guru.materi.edit', compact('materi', 'jadwals'));
+
+        // Ambil kelas yang ada di jadwal mengajar guru
+        $kelas = Jadwal::where('guru_id', $guru->id)
+            ->with('kelas')
+            ->get()
+            ->pluck('kelas')
+            ->unique('id')
+            ->sortBy('nama');
+
+        return view('guru.materi.edit', compact('materi', 'jadwals', 'kelas'));
     }
 
     public function update(Request $request, Materi $materi)
     {
         $request->validate([
             'jadwal_id' => 'required|exists:jadwals,id',
-            'kelas_id' => 'required|exists:kelas,id',
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,txt|max:2048',
+            'file_materi' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx|max:10240',
         ]);
 
-        $data = $request->except('file');
+        $user = Auth::user();
+        $guru = Guru::where('user_id', $user->id)->first();
+
+        if (!$guru) {
+            return redirect()->back()->with('error', 'Data guru tidak ditemukan.');
+        }
+
+        // Validasi bahwa jadwal yang dipilih milik guru ini
+        $jadwal = Jadwal::where('id', $request->jadwal_id)
+            ->where('guru_id', $guru->id)
+            ->with('kelas')
+            ->first();
+
+        if (!$jadwal) {
+            return redirect()->back()
+                ->with('error', 'Jadwal yang dipilih tidak valid atau bukan jadwal mengajar Anda.')
+                ->withInput();
+        }
 
         // Upload file baru jika ada
-        if ($request->hasFile('file')) {
+        $filePath = $materi->file;
+        if ($request->hasFile('file_materi')) {
             // Hapus file lama jika ada
             if ($materi->file && Storage::disk('public')->exists($materi->file)) {
                 Storage::disk('public')->delete($materi->file);
             }
 
-            $file = $request->file('file');
+            $file = $request->file('file_materi');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('materi', $fileName, 'public');
-            $data['file'] = $filePath;
         }
 
-        $materi->update($data);
+        // Update materi
+        $materi->update([
+            'jadwal_id' => $jadwal->id,
+            'kelas_id' => $jadwal->kelas_id,
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'file' => $filePath,
+        ]);
 
         return redirect()->route('materi.index')
             ->with('success', 'Materi berhasil diperbarui!');

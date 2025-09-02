@@ -56,7 +56,7 @@
               <select name="guru_id" class="form-select mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
                 <option value="">Pilih Guru</option>
                 @foreach($guruList as $guru)
-                  <option value="{{ $guru->id }}">{{ $guru->nama }}</option>
+                  <option value="{{ $guru->id }}">{{ $guru->nama }} ({{ $guru->mapel }})</option>
                 @endforeach
               </select>
             </div>
@@ -75,13 +75,13 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <!-- Jam Mulai -->
             <div>
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Jam Mulai</label>
-              <input type="time" name="jam_mulai" step="900" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
+               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Jam Mulai</label>
+               <input type="time" name="jam_mulai" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
             </div>
             <!-- Jam Selesai -->
             <div>
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Jam Selesai</label>
-              <input type="time" name="jam_selesai" step="900" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
+               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Jam Selesai</label>
+               <input type="time" name="jam_selesai" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
             </div>
           </div>
 

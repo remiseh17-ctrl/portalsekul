@@ -54,17 +54,9 @@
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Jam Selesai <span class="text-red-500">*</span></label>
               <input type="time" name="jam_selesai" value="{{ old('jam_selesai', $jadwal->jam_selesai) }}" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
             </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Mata Pelajaran <span class="text-red-500">*</span></label>
-              <input type="text" name="mata_pelajaran" value="{{ old('mata_pelajaran', $jadwal->mata_pelajaran) }}" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
-            </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Ruangan</label>
-              <input type="text" name="ruangan" value="{{ old('ruangan', $jadwal->ruangan) }}" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="Contoh: Lab 1, Ruang 101">
-            </div>
             <div class="md:col-span-2">
-              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Keterangan</label>
-              <textarea name="keterangan" class="form-textarea mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" rows="3" placeholder="Keterangan tambahan (opsional)">{{ old('keterangan', $jadwal->keterangan) }}</textarea>
+              <label class="block text-gray-700 dark:text-gray-300 font-semibold">Mata Pelajaran <span class="text-red-500">*</span></label>
+              <input type="text" name="mapel" value="{{ old('mapel', $jadwal->mapel) }}" class="form-input mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-indigo-500 focus:border-indigo-500 transition" required>
             </div>
           </div>
         </div>

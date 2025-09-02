@@ -23,11 +23,12 @@
                             <i data-lucide="file-text" class="w-4 h-4 mr-1"></i>
                             {{ $materis->total() }} Materi
                         </div>
-                        <a href="{{ route('materi.create') }}"
-                           class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
+                        <button type="button" 
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium"
+                                data-bs-toggle="modal" data-bs-target="#modalCreateMateri">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                             <span>Upload Materi</span>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -46,6 +47,30 @@
                         <p class="text-green-700 dark:text-green-300 text-sm">{{ session('success') }}</p>
                     </div>
                     <button type="button" class="ml-auto text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300" data-bs-dismiss="alert">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- Error Notification --}}
+        @if($errors->any())
+        <div class="mb-6">
+            <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center">
+                    <div class="bg-red-100 dark:bg-red-900/50 rounded-lg p-2 mr-3">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-red-800 dark:text-red-200">Terjadi kesalahan:</p>
+                        <ul class="mt-2 list-disc list-inside text-red-700 dark:text-red-300 text-sm">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <button type="button" class="ml-auto text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300" data-bs-dismiss="alert">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -159,7 +184,10 @@
                                     <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-3">
                                         <i data-lucide="book-open" class="w-4 h-4 text-orange-600 dark:text-orange-400"></i>
                                     </div>
-                                    <span class="text-gray-900 dark:text-white font-medium">{{ $materi->jadwal->mapel ?? '-' }}</span>
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-900 dark:text-white font-medium">{{ $materi->jadwal->mapel ?? '-' }}</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ $materi->jadwal->hari ?? '-' }} {{ $materi->jadwal->jam_mulai ?? '' }}-{{ $materi->jadwal->jam_selesai ?? '' }}</span>
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-4 py-4">
@@ -179,11 +207,16 @@
                             </td>
                             <td class="px-4 py-4">
                                 <div class="flex justify-center gap-2">
-                                    <a href="{{ route('materi.edit', $materi->id) }}"
+                                    <button type="button"
+                                       class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
+                                       title="Lihat Detail" data-bs-toggle="modal" data-bs-target="#modalViewMateri{{ $materi->id }}">
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                    </button>
+                                    <button type="button"
                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
-                                       title="Edit Materi">
+                                       title="Edit Materi" data-bs-toggle="modal" data-bs-target="#modalEditMateri{{ $materi->id }}">
                                         <i data-lucide="pencil" class="w-4 h-4"></i>
-                                    </a>
+                                    </button>
                                     <form action="{{ route('materi.destroy', $materi->id) }}" method="POST"
                                           onsubmit="return confirm('Yakin ingin menghapus materi ini?')" class="inline">
                                         @csrf @method('DELETE')
@@ -205,11 +238,12 @@
                                     </div>
                                     <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada materi</p>
                                     <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Mulai dengan mengupload materi pembelajaran</p>
-                                    <a href="{{ route('materi.create') }}"
-                                       class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium mt-4">
+                                    <button type="button" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium mt-4"
+                                           data-bs-toggle="modal" data-bs-target="#modalCreateMateri">
                                         <i data-lucide="plus" class="w-5 h-5"></i>
                                         <span>Upload Materi Pertama</span>
-                                    </a>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -224,14 +258,25 @@
             </div>
             @endif
         </div>
-
-                @if($materis->hasPages())
-                    <div class="d-flex justify-content-center p-3">
-                        {{ $materis->links() }}
-                    </div>
-                @endif
     </div>
 </div>
 
 <script src="{{ asset('js/page.js') }}"></script>
+<script>
+document.body.classList.add('page-guru-materi');
+</script>
+
+{{-- Include Modal Create Materi --}}
+@include('guru.materi.create-modal')
+
+{{-- Include Modal Edit Materi --}}
+@foreach($materis as $materi)
+    @include('guru.materi.edit-modal', ['materi' => $materi])
+@endforeach
+
+{{-- Include Modal View Materi --}}
+@foreach($materis as $materi)
+    @include('guru.materi.view-modal', ['materi' => $materi])
+@endforeach
+
 @endsection

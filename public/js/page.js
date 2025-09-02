@@ -24,14 +24,23 @@ function createTableFilter(inputId, tableId, additionalFilters = [], clearBtnId 
 
     const filterTable = () => {
         const searchTerm = input.value.toLowerCase().trim();
-        const additionalValues = additionalFilters.map(id => document.getElementById(id)?.value.toLowerCase() || '');
+        const additionalValues = additionalFilters.map(id => document.getElementById(id)?.value || '');
 
         let visibleCount = 0;
 
         rows.forEach(row => {
             const matchesSearch = row.textContent.toLowerCase().includes(searchTerm);
             const matchesAdditional = additionalValues.every((value, index) => {
-                return !value || row.cells[index + 1]?.textContent.toLowerCase().includes(value);
+                if (!value) return true;
+                if (index === 0) { // kelasFilter
+                    const kelasId = row.querySelector('[data-kelas-id]')?.getAttribute('data-kelas-id');
+                    return kelasId === value;
+                } else if (index === 1) { // guruFilter
+                    const guruId = row.querySelector('[data-guru-id]')?.getAttribute('data-guru-id');
+                    return guruId === value;
+                } else { // hariFilter
+                    return row.cells[4]?.textContent.trim() === value;
+                }
             });
 
             row.style.display = matchesSearch && matchesAdditional ? '' : 'none';
@@ -113,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Halaman Jadwal
     if (body.classList.contains('page-jadwal')) {
-        createTableFilter("liveSearchInput", "tableJadwal", ["kelasFilter", "hariFilter"], "clearSearch");
+        createTableFilter("liveSearchInput", "tableJadwal", ["kelasFilter", "guruFilter", "hariFilter"], "clearSearch");
         animateOnLoad('.bg-white.dark\\:bg-gray-800.rounded-xl', 100);
         animateOnLoad('tbody tr', 80);
     }

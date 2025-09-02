@@ -12,6 +12,7 @@
             </button>
 
             <!-- Desktop: profile dropdown (terpisah) -->
+            @if(Auth::check())
             <div class="relative hidden md:block">
                 <button id="desktopProfileBtn" type="button" aria-expanded="false" aria-controls="desktopProfileMenu" aria-label="Buka profil" class="inline-flex items-center gap-2 px-3 h-10 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                     <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profil" class="h-6 w-6 rounded-full object-cover" />
@@ -40,6 +41,13 @@
                     </form>
                 </div>
             </div>
+            @else
+            <!-- Login button for non-authenticated users -->
+            <a href="{{ route('login') }}" class="hidden md:inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
+                Masuk
+            </a>
+            @endif
 
             <!-- Mobile: menu dropdown (gabungan menu utama + profil) -->
             <div class="relative md:hidden">
@@ -50,6 +58,7 @@
                 </button>
                 <!-- Dropdown Mobile -->
                 <div id="mobileMenu" class="absolute right-0 mt-2 w-72 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 hidden z-50 p-2">
+                    @if(Auth::check())
                     <!-- Profil ringkas -->
                     <div class="flex items-center gap-3 px-3 py-2 rounded-md bg-gray-50 dark:bg-gray-800">
                         <img src="https://randomuser.me/api/portraits/men/64.jpg" alt="Profil" class="h-10 w-10 rounded-full object-cover" />
@@ -59,8 +68,10 @@
                         </div>
                     </div>
                     <div class="my-2 h-px bg-gray-200 dark:bg-gray-700"></div>
+                    @endif
                     <!-- Menu utama -->
                     <nav class="flex flex-col space-y-1 text-sm">
+                        @if(Auth::check())
                         <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('dashboard') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                             <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
                             <span>Dashboard</span>
@@ -129,7 +140,23 @@
                                 <span>Pengumuman</span>
                             </a>
                         @endif
+                        @else
+                        <!-- Public menu for non-authenticated users -->
+                        <a href="{{ url('/') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <i data-lucide="home" class="h-5 w-5"></i>
+                            <span>Beranda</span>
+                        </a>
+                        <a href="#fitur" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <i data-lucide="settings" class="h-5 w-5"></i>
+                            <span>Fitur</span>
+                        </a>
+                        <a href="#kontak" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <i data-lucide="phone" class="h-5 w-5"></i>
+                            <span>Kontak</span>
+                        </a>
+                        @endif
                     </nav>
+                    @if(Auth::check())
                     <div class="my-2 h-px bg-gray-200 dark:bg-gray-700"></div>
                     <!-- Aksi profil -->
                     <div class="flex flex-col text-sm">
@@ -145,6 +172,16 @@
                             </button>
                         </form>
                     </div>
+                    @else
+                    <div class="my-2 h-px bg-gray-200 dark:bg-gray-700"></div>
+                    <!-- Login button for mobile -->
+                    <div class="flex flex-col text-sm">
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                            <i data-lucide="log-in" class="h-5 w-5"></i>
+                            Masuk ke Sistem
+                        </a>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

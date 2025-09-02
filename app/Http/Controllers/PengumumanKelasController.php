@@ -15,7 +15,7 @@ class PengumumanKelasController extends Controller
     {
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
-        
+
         if (!$guru) {
             return redirect()->route('dashboard')->with('error', 'Data guru tidak ditemukan.');
         }
@@ -25,8 +25,16 @@ class PengumumanKelasController extends Controller
             ->with(['kelas'])
             ->orderBy('tanggal', 'desc')
             ->paginate(15);
-            
-        return view('guru.pengumuman-kelas.index', compact('pengumumanKelas'));
+
+        // Ambil kelas yang diajar guru untuk modal
+        $kelas = Kelas::whereHas('jadwals', function($query) use ($guru) {
+            $query->where('guru_id', $guru->id);
+        })->get();
+
+        // Jika tidak ada kelas, beri pesan peringatan
+        $kelasCount = $kelas->count();
+
+        return view('guru.pengumuman-kelas.index', compact('pengumumanKelas', 'kelas', 'kelasCount'));
     }
 
     public function create()
@@ -52,14 +60,18 @@ class PengumumanKelasController extends Controller
             'kelas_id' => 'required|exists:kelas,id',
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
-            'tanggal' => 'required|date',
         ]);
 
         $user = Auth::user();
         $guru = Guru::where('user_id', $user->id)->first();
 
-        $data = $request->all();
+        $data = $request->only([
+            'kelas_id',
+            'judul',
+            'isi'
+        ]);
         $data['guru_id'] = $guru->id;
+        $data['tanggal'] = now()->format('Y-m-d');
 
         PengumumanKelas::create($data);
 
@@ -95,10 +107,15 @@ class PengumumanKelasController extends Controller
             'kelas_id' => 'required|exists:kelas,id',
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
-            'tanggal' => 'required|date',
         ]);
 
-        $pengumumanKelas->update($request->all());
+        $data = $request->only([
+            'kelas_id',
+            'judul',
+            'isi'
+        ]);
+
+        $pengumumanKelas->update($data);
 
         return redirect()->route('pengumuman-kelas.index')
             ->with('success', 'Pengumuman kelas berhasil diperbarui!');

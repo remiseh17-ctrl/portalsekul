@@ -33,6 +33,7 @@
                             <span class="sidebar-label hidden md:inline font-medium">Dashboard</span>
                         </a>
 
+                        @if(Auth::check())
                         @if(Auth::user()->role === 'admin')
                             <!-- Admin -->
                             <a href="{{ route('siswa.index') }}" title="Siswa" aria-label="Siswa" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('siswa*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
@@ -99,6 +100,7 @@
                                 <i data-lucide="megaphone" class="h-5 w-5"></i>
                                 <span class="sidebar-label hidden md:inline font-medium">Pengumuman</span>
                             </a>
+                        @endif
                         @endif
                     </nav>
                     <!-- Desktop: collapse toggle (icon-only) -->

@@ -23,11 +23,19 @@
                             <i data-lucide="megaphone" class="w-4 h-4 mr-1"></i>
                             {{ $pengumumanKelas->total() }} Pengumuman
                         </div>
-                        <a href="{{ route('pengumuman-kelas.create') }}"
-                           class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
+                        @if($kelasCount > 0)
+                        <button onclick="openCreatePengumumanModal()"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                             <span>Tambah Pengumuman</span>
-                        </a>
+                        </button>
+                        @else
+                        <button disabled
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed font-medium">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            <span>Tambah Pengumuman</span>
+                        </button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -48,6 +56,22 @@
                     <button type="button" class="ml-auto text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300" data-bs-dismiss="alert">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if($kelasCount == 0)
+        <div class="mb-6">
+            <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center">
+                    <div class="bg-yellow-100 dark:bg-yellow-900/50 rounded-lg p-2 mr-3">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600 dark:text-yellow-400"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-yellow-800 dark:text-yellow-200">Peringatan!</p>
+                        <p class="text-yellow-700 dark:text-yellow-300 text-sm">Anda belum memiliki jadwal mengajar di kelas manapun. Silakan hubungi administrator untuk menambahkan jadwal mengajar Anda.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,11 +193,11 @@
                             </td>
                             <td class="px-4 py-4">
                                 <div class="flex justify-center gap-2">
-                                    <a href="{{ route('pengumuman-kelas.edit', $pengumuman->id) }}"
+                                    <button onclick="openEditPengumumanModal({{ $pengumuman->id }}, '{{ $pengumuman->judul }}', '{{ $pengumuman->isi }}', '{{ $pengumuman->kelas_id }}')"
                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
                                        title="Edit Pengumuman">
                                         <i data-lucide="pencil" class="w-4 h-4"></i>
-                                    </a>
+                                    </button>
                                     <form action="{{ route('pengumuman-kelas.destroy', $pengumuman->id) }}" method="POST"
                                           onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')" class="inline">
                                         @csrf @method('DELETE')
@@ -195,11 +219,11 @@
                                     </div>
                                     <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada pengumuman kelas</p>
                                     <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Mulai dengan menambahkan pengumuman untuk kelas Anda</p>
-                                    <a href="{{ route('pengumuman-kelas.create') }}"
+                                    <button onclick="openCreatePengumumanModal()"
                                        class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium mt-4">
                                         <i data-lucide="plus" class="w-5 h-5"></i>
                                         <span>Tambah Pengumuman Pertama</span>
-                                    </a>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -215,13 +239,85 @@
             @endif
         </div>
 
-                @if($pengumumanKelas->hasPages())
-                    <div class="d-flex justify-content-center p-3">
-                        {{ $pengumumanKelas->links() }}
-                    </div>
-                @endif
     </div>
 </div>
+
+<!-- Include Modal Files -->
+@include('guru.pengumuman-kelas.create-modal', ['kelas' => $kelas])
+@include('guru.pengumuman-kelas.edit-modal', ['kelas' => $kelas])
+@include('guru.pengumuman-kelas.view-modal')
+
+<script>
+// Modal Functions
+function openCreatePengumumanModal() {
+    document.getElementById('createPengumumanModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function openEditPengumumanModal(id, judul, isi, kelasId) {
+    // Set form action
+    document.getElementById('editPengumumanForm').action = `/pengumuman-kelas/${id}`;
+
+    // Populate form fields
+    document.getElementById('edit_judul').value = judul;
+    document.getElementById('edit_isi').value = isi;
+
+    // Handle kelas radio buttons
+    const kelasRadio = document.querySelector(`input[name="kelas_id"][value="${kelasId}"]`);
+    if (kelasRadio) {
+        kelasRadio.checked = true;
+    }
+
+    // Show modal
+    document.getElementById('editPengumumanModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Success message auto-hide
+@if(session('success'))
+setTimeout(() => {
+    const alert = document.querySelector('.bg-green-50');
+    if (alert) {
+        alert.style.transition = 'opacity 0.5s ease-out';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+    }
+}, 3000);
+@endif
+
+// Live search functionality
+document.getElementById('liveSearchInput').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#tablePengumumanKelas tbody tr');
+    const clearButton = document.getElementById('clearSearch');
+
+    if (searchTerm.length > 0) {
+        clearButton.classList.remove('hidden');
+    } else {
+        clearButton.classList.add('hidden');
+    }
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+// Clear search
+document.getElementById('clearSearch').addEventListener('click', function() {
+    document.getElementById('liveSearchInput').value = '';
+    this.classList.add('hidden');
+
+    const rows = document.querySelectorAll('#tablePengumumanKelas tbody tr');
+    rows.forEach(row => {
+        row.style.display = '';
+    });
+});
+</script>
 
 <script src="{{ asset('js/page.js') }}"></script>
 @endsection

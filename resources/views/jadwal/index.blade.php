@@ -93,6 +93,7 @@
                     <div class="relative">
                         <input type="text"
                             id="liveSearchInput"
+                            value="{{ request('q') }}"
                             class="w-[150px] md:w-[180px] pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-200 shadow-sm"
                             placeholder="Cari jadwal..."
                             autocomplete="off">
@@ -108,21 +109,21 @@
                     <select id="kelasFilter" class="w-[100px] md:w-[120px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-200 shadow-sm">
                         <option value="">Semua Kelas</option>
                         @foreach($kelasList as $kelas)
-                            <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                            <option value="{{ $kelas->id }}" @selected(request('kelas_id') == $kelas->id)>{{ $kelas->nama }}</option>
                         @endforeach
                     </select>
                     @if(Auth::user()->role === 'admin')
                     <select id="guruFilter" class="w-[100px] md:w-[120px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-200 shadow-sm">
                         <option value="">Semua Guru</option>
                         @foreach($guruList as $guru)
-                            <option value="{{ $guru->nama }}">{{ $guru->nama }}</option>
+                            <option value="{{ $guru->id }}" @selected(request('guru_id') == $guru->id)>{{ $guru->nama }}</option>
                         @endforeach
                     </select>
                     @endif
                     <select id="hariFilter" class="w-[90px] md:w-[110px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-purple-500 dark:focus:border-purple-400 transition-all duration-200 shadow-sm">
                         <option value="">Semua Hari</option>
                         @foreach($hariList as $hari)
-                            <option value="{{ $hari }}">{{ $hari }}</option>
+                            <option value="{{ $hari }}" @selected(request('hari') == $hari)>{{ $hari }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -130,7 +131,7 @@
             <!-- End Header -->
 
             <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+                <table id="tableJadwal" class="w-full text-sm">
                     <thead class="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                         <tr>
                             <th class="px-4 py-3 text-center font-semibold text-gray-900 dark:text-white w-16">
@@ -181,9 +182,9 @@
                         @forelse($jadwals as $i => $jadwal)
                         <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                             <td class="px-4 py-4 text-center text-gray-900 dark:text-white font-medium">
-                                {{ $jadwals->firstItem() + $i }}
+                                {{ method_exists($jadwals, 'firstItem') ? $jadwals->firstItem() + $i : $i + 1 }}
                             </td>
-                            <td class="px-4 py-4">
+                            <td class="px-4 py-4" data-kelas-id="{{ $jadwal->kelas_id }}">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-3">
                                         <i data-lucide="school" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
@@ -199,7 +200,7 @@
                                     <span class="font-semibold text-gray-900 dark:text-white">{{ $jadwal->mapel }}</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-4">
+                            <td class="px-4 py-4" data-guru-id="{{ $jadwal->guru_id }}">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-3">
                                         <i data-lucide="user-check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
@@ -254,7 +255,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr class="bg-white dark:bg-gray-800">
+                        <tr class="bg-white dark:bg-gray-800" data-empty>
                             <td colspan="7" class="px-4 py-12 text-center">
                                 <div class="flex flex-col items-center">
                                     <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
@@ -280,6 +281,9 @@
 </div>
 
 <script src="{{ asset('js/page.js') }}"></script>
+<script>
+document.body.classList.add('page-jadwal');
+</script>
 {{-- Include Modal Create Jadwal --}}
 @include('jadwal.create-modal')
 
