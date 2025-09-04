@@ -36,10 +36,6 @@
                         @if(Auth::check())
                         @if(Auth::user()->role === 'admin')
                             <!-- Admin -->
-                            <a href="{{ route('siswa.index') }}" title="Siswa" aria-label="Siswa" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('siswa*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
-                                <i data-lucide="users" class="h-5 w-5"></i>
-                                <span class="sidebar-label hidden md:inline font-medium">Siswa</span>
-                            </a>
                             <a href="{{ route('guru.index') }}" title="Guru" aria-label="Guru" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('guru*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="graduation-cap" class="h-5 w-5"></i>
                                 <span class="sidebar-label hidden md:inline font-medium">Guru</span>
@@ -55,6 +51,10 @@
                             <a href="{{ route('pengumuman.index') }}" title="Pengumuman" aria-label="Pengumuman" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('pengumuman*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="megaphone" class="h-5 w-5"></i>
                                 <span class="sidebar-label hidden md:inline font-medium">Pengumuman</span>
+                            </a>
+                            <a href="{{ route('admin-tugas-guru.index') }}" title="Monitoring Tugas Guru" aria-label="Monitoring Tugas Guru" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('admin-tugas-guru*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                                <i data-lucide="clipboard-list" class="h-5 w-5"></i>
+                                <span class="sidebar-label hidden md:inline font-medium">Monitoring Tugas Guru</span>
                             </a>
                         @elseif(Auth::user()->role === 'guru')
                             <!-- Guru -->
@@ -77,6 +77,10 @@
                             <a href="{{ route('pengumuman-kelas.index') }}" title="Pengumuman Kelas" aria-label="Pengumuman Kelas" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('pengumuman-kelas*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="megaphone" class="h-5 w-5"></i>
                                 <span class="sidebar-label hidden md:inline font-medium">Pengumuman Kelas</span>
+                            </a>
+                            <a href="{{ route('guru.kerjakan-tugas.index') }}" title="Kerjakan Tugas" aria-label="Kerjakan Tugas" class="group flex items-center gap-3 w-full px-3 py-2 rounded-lg transition-colors {{ request()->is('kerjakan-tugas*') ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                                <i data-lucide="clipboard-list" class="h-5 w-5"></i>
+                                <span class="sidebar-label hidden md:inline font-medium">Kerjakan Tugas</span>
                             </a>
                         @elseif(Auth::user()->role === 'siswa')
                             <!-- Siswa -->

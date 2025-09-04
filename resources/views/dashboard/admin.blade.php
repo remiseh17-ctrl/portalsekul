@@ -93,6 +93,83 @@
             @endforeach
         </div>
 
+        <!-- Quick Actions -->
+        <div class="mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="p-6 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-2 mr-3 shadow-lg">
+                            <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+                        </div>
+                        Quick Actions
+                    </h5>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <a href="{{ route('admin-tugas-guru.index') }}" 
+                           class="group p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                                    <i data-lucide="clipboard-list" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="font-semibold text-green-800 dark:text-green-200 group-hover:text-green-900 dark:group-hover:text-green-100 transition-colors">
+                                        Monitoring Tugas Guru
+                                    </h6>
+                                    <p class="text-sm text-green-600 dark:text-green-400">Kelola & monitor tugas guru</p>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a href="{{ route('guru.index') }}" 
+                           class="group p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                                    <i data-lucide="graduation-cap" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="font-semibold text-blue-800 dark:text-blue-200 group-hover:text-blue-900 dark:group-hover:text-blue-100 transition-colors">
+                                        Manajemen Guru
+                                    </h6>
+                                    <p class="text-sm text-blue-600 dark:text-blue-400">Kelola data guru</p>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a href="{{ route('siswa.index') }}" 
+                           class="group p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                                    <i data-lucide="users" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="font-semibold text-purple-800 dark:text-purple-200 group-hover:text-purple-900 dark:group-hover:text-purple-100 transition-colors">
+                                        Manajemen Siswa
+                                    </h6>
+                                    <p class="text-sm text-purple-600 dark:text-purple-400">Kelola data siswa</p>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a href="{{ route('pengumuman.index') }}" 
+                           class="group p-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border border-orange-200 dark:border-orange-800 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                                    <i data-lucide="megaphone" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="font-semibold text-orange-800 dark:text-orange-200 group-hover:text-orange-900 dark:group-hover:text-orange-100 transition-colors">
+                                        Pengumuman
+                                    </h6>
+                                    <p class="text-sm text-orange-600 dark:text-orange-400">Buat pengumuman</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Content Grid -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <!-- Jadwal Pelajaran -->

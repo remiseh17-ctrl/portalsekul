@@ -182,6 +182,11 @@
                             </td>
                             <td class="px-4 py-4">
                                 <div class="flex justify-center gap-2">
+                                    <a href="{{ route('siswa.index', ['kelas_id' => $kls->id]) }}"
+                                       class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
+                                       title="Lihat Siswa" data-bs-toggle="tooltip">
+                                        <i data-lucide="users" class="w-4 h-4"></i>
+                                    </a>
                                     <a href="{{ route('jadwal.index', ['kelas_id' => $kls->id]) }}"
                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300"
                                        title="Lihat Jadwal" data-bs-toggle="tooltip">

@@ -77,10 +77,6 @@
                             <span>Dashboard</span>
                         </a>
                         @if(Auth::user()->role === 'admin')
-                            <a href="{{ route('siswa.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('siswa*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
-                                <i data-lucide="users" class="h-5 w-5"></i>
-                                <span>Siswa</span>
-                            </a>
                             <a href="{{ route('guru.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('guru*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="graduation-cap" class="h-5 w-5"></i>
                                 <span>Guru</span>
@@ -96,6 +92,10 @@
                             <a href="{{ route('pengumuman.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('pengumuman*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="megaphone" class="h-5 w-5"></i>
                                 <span>Pengumuman</span>
+                            </a>
+                            <a href="{{ route('admin-tugas-guru.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('admin-tugas-guru*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                                <i data-lucide="clipboard-list" class="h-5 w-5"></i>
+                                <span>Monitoring Tugas Guru</span>
                             </a>
                         @elseif(Auth::user()->role === 'guru')
                             <a href="{{ route('guru.jadwal') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('jadwal-mengajar') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
@@ -113,6 +113,10 @@
                             <a href="{{ route('materi.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('materi*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="file-text" class="h-5 w-5"></i>
                                 <span>Materi</span>
+                            </a>
+                            <a href="{{ route('guru.kerjakan-tugas.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('kerjakan-tugas*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                                <i data-lucide="clipboard-list" class="h-5 w-5"></i>
+                                <span>Kerjakan Tugas</span>
                             </a>
                             <a href="{{ route('pengumuman-kelas.index') }}" class="inline-flex items-center gap-3 px-3 py-2 rounded-md transition-colors {{ request()->is('pengumuman-kelas*') ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                 <i data-lucide="megaphone" class="h-5 w-5"></i>

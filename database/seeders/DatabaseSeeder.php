@@ -90,5 +90,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             JenisPenilaianSeeder::class
         ]);
+
+        // Seed Sample Tasks
+        $this->call([
+            TugasSeeder::class
+        ]);
     }
 }

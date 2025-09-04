@@ -29,6 +29,11 @@
                             <i data-lucide="plus" class="w-5 h-5"></i>
                             <span>Tambah Guru</span>
                         </button>
+                        <a href="{{ route('admin-tugas-guru.index') }}"
+                           class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
+                            <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                            <span>Kelola Tugas Guru</span>
+                        </a>
                     </div>
                 </div>
             </div>

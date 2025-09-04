@@ -14,21 +14,38 @@
                             <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-2 mr-3">
                                 <i data-lucide="users" class="w-6 h-6 text-white"></i>
                             </div>
-                            Manajemen Siswa
+                            Manajemen Siswa Kelas {{ $kelas->nama }}
                         </h1>
-                        <p class="text-gray-600 dark:text-gray-300 mt-1">Kelola data siswa dengan mudah dan efisien</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-1">
+                            Kelola siswa untuk kelas {{ $kelas->nama }}. Akses halaman ini melalui menu Manajemen Kelas.
+                        </p>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="text-sm text-gray-500 dark:text-gray-300 hidden sm:flex items-center">
                             <i data-lucide="users" class="w-4 h-4 mr-1"></i>
                             {{ $siswas->total() }} Siswa Terdaftar
                         </div>
-                        <button type="button" 
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium" 
-                                data-bs-toggle="modal" data-bs-target="#modalCreateSiswa">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                            <span>Tambah Siswa</span>
-                        </button>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button type="button"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium"
+                                    data-bs-toggle="modal" data-bs-target="#modalCreateSiswa">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                                <span>Tambah Siswa</span>
+                            </button>
+
+                            <button type="button"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium"
+                                    data-bs-toggle="modal" data-bs-target="#modalImportExcel">
+                                <i data-lucide="upload" class="w-5 h-5"></i>
+                                <span>Import Excel</span>
+                            </button>
+
+                            <a href="{{ route('siswa.download-template') }}"
+                               class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 font-medium">
+                                <i data-lucide="download" class="w-5 h-5"></i>
+                                <span>Download Template</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,6 +66,25 @@
                     <button type="button" class="ml-auto text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300" data-bs-dismiss="alert">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- Import Errors --}}
+        @if(session('import_errors'))
+        <div class="mb-6">
+            <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center mb-3">
+                    <div class="bg-red-100 dark:bg-red-900/50 rounded-lg p-2 mr-3">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+                    </div>
+                    <h3 class="font-semibold text-red-800 dark:text-red-200">Error Import</h3>
+                </div>
+                <div class="space-y-1">
+                    @foreach(session('import_errors') as $error)
+                        <p class="text-red-700 dark:text-red-300 text-sm">• {{ $error }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -83,9 +119,8 @@
                         </div>
                     </div>
                     <select id="kelasFilter" class="w-[110px] md:w-[130px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 shadow-sm">
-                        <option value="">Semua Kelas</option>
-                        @foreach($kelasList as $kelas)
-                            <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                        @foreach($kelasList as $kelasOption)
+                            <option value="{{ $kelasOption->nama }}" {{ $kelas->id == $kelasOption->id ? 'selected' : '' }}>{{ $kelasOption->nama }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -253,5 +288,85 @@
     @include('siswa.edit-modal', ['siswa' => $siswa])
 @endforeach
 
+{{-- Modal Import Excel --}}
+<div class="modal fade" id="modalImportExcel" tabindex="-1" aria-labelledby="modalImportExcelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalImportExcelLabel">
+                    <i data-lucide="upload" class="w-5 h-5 inline mr-2"></i>
+                    Import Siswa dari Excel
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('siswa.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-6">
+                        <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mb-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 dark:bg-blue-900/50 rounded-lg p-2 mr-3">
+                                    <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">Panduan Import Excel</h4>
+                                    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                                        <li>• Pastikan file Excel memiliki header yang sesuai</li>
+                                        <li>• Kolom wajib: <strong>nis</strong>, <strong>nama</strong>, <strong>tanggal_lahir</strong></li>
+                                        <li>• Kolom opsional: jurusan, alamat, no_hp</li>
+                                        <li>• NIS harus unik dan tepat 8 digit angka</li>
+                                        <li>• Tanggal lahir digunakan untuk generate password siswa</li>
+                                        <li>• Format tanggal: YYYY-MM-DD (contoh: 2005-05-15)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="excel_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Pilih File Excel <span class="text-red-500">*</span>
+                            </label>
+                            <input type="file" id="excel_file" name="file"
+                                   class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200"
+                                   accept=".xlsx,.xls" required>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                Format yang didukung: .xlsx, .xls (Maksimal 5MB)
+                            </p>
+                        </div>
+
+                        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                        <i data-lucide="upload" class="w-4 h-4 inline mr-2"></i>
+                        Import Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="{{ asset('js/page.js') }}"></script>
+<script>
+// Class filter functionality - redirect to different class
+document.getElementById('kelasFilter').addEventListener('change', function() {
+    const selectedClassName = this.value;
+    if (selectedClassName) {
+        // Find the class ID from the selected class name
+        const kelasList = @json($kelasList);
+        const selectedClass = kelasList.find(kelas => kelas.nama === selectedClassName);
+        if (selectedClass) {
+            // Redirect to the same page with different kelas_id
+            const url = new URL(window.location);
+            url.searchParams.set('kelas_id', selectedClass.id);
+            window.location.href = url.toString();
+        }
+    }
+});
+</script>
 @endsection

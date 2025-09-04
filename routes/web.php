@@ -17,6 +17,8 @@ use App\Http\Controllers\SiswaNilaiController;
 use App\Http\Controllers\SiswaAbsensiController;
 use App\Http\Controllers\SiswaTugasController;
 use App\Http\Controllers\GuruTugasController;
+use App\Http\Controllers\AdminTugasGuruController;
+use App\Http\Controllers\GuruKerjakanTugasController;
 use App\Http\Controllers\JenisPenilaianController;
 
 Route::get('/', function () {
@@ -37,8 +39,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('guru', GuruController::class);
         Route::resource('kelas', KelasController::class);
         Route::resource('jadwal', JadwalController::class);
+
+        // Siswa Excel Import (only accessible through class management)
+        Route::post('siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
+        Route::get('siswa/download-template', [SiswaController::class, 'downloadTemplate'])->name('siswa.download-template');
         Route::resource('pengumuman', PengumumanController::class);
         Route::resource('jenis-penilaian', JenisPenilaianController::class);
+                        Route::resource('admin-tugas-guru', AdminTugasGuruController::class);
+                Route::get('admin-tugas-guru/{tugas}/download', [AdminTugasGuruController::class, 'download'])->name('admin-tugas-guru.download');
     });
 });
 
@@ -81,10 +89,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Pengumuman kelas
         Route::resource('pengumuman-kelas', PengumumanKelasController::class);
 
-        // Cek Tugas Siswa
-        Route::get('tugas', [GuruTugasController::class, 'index'])->name('guru.tugas.index');
-        Route::get('tugas/{submission}', [GuruTugasController::class, 'show'])->name('guru.tugas.show');
-        Route::patch('tugas/{submission}/status', [GuruTugasController::class, 'updateStatus'])->name('guru.tugas.update-status');
+        // Kerjakan Tugas dari Admin
+        Route::get('kerjakan-tugas', [GuruKerjakanTugasController::class, 'index'])->name('guru.kerjakan-tugas.index');
+        Route::get('kerjakan-tugas/{tugas}', [GuruKerjakanTugasController::class, 'show'])->name('guru.kerjakan-tugas.show');
+        Route::get('kerjakan-tugas/{tugas}/submit', [GuruKerjakanTugasController::class, 'submit'])->name('guru.kerjakan-tugas.submit');
+        Route::post('kerjakan-tugas/{tugas}/submit', [GuruKerjakanTugasController::class, 'store'])->name('guru.kerjakan-tugas.store');
+        Route::get('kerjakan-tugas/{tugas}/edit', [GuruKerjakanTugasController::class, 'edit'])->name('guru.kerjakan-tugas.edit');
+        Route::put('kerjakan-tugas/{tugas}/edit', [GuruKerjakanTugasController::class, 'update'])->name('guru.kerjakan-tugas.update');
+        Route::get('kerjakan-tugas/{tugas}/download', [GuruKerjakanTugasController::class, 'download'])->name('guru.kerjakan-tugas.download');
+        Route::get('submission/{submission}/download', [GuruKerjakanTugasController::class, 'downloadSubmission'])->name('guru.kerjakan-tugas.download-submission');
     });
 });
 

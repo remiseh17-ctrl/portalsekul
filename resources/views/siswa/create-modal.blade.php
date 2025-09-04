@@ -4,6 +4,7 @@
     <div class="modal-content bg-white dark:bg-gray-800 rounded-xl shadow-lg border-0 overflow-y-auto max-h-[90vh]">
       <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
         <div class="modal-header border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
           <h5 class="modal-title font-bold text-gray-900 dark:text-white flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
